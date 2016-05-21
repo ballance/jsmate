@@ -12,7 +12,7 @@ jsMate is a web-based chess application built initially over a [time-boxed weeke
  - Serve-Static
  - Nancy
  - Nancy.Hosting.Self
- - *SQLite
+ - *LiteDB
 
 #### Getting started from zero
 
