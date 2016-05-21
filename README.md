@@ -1,7 +1,7 @@
 # jsmate
 
 #### Overview
-jsMate is a web-based chess application built initially over a time-boxed weekend.
+jsMate is a web-based chess application built initially over a [time-boxed weekend](https://github.com/ballance/jsmate/graphs/punch-card).
 
 #### Planning / Status
 [Trello Board](https://trello.com/b/rEdr94uM/jsmate-kanban-board)
