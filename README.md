@@ -1,6 +1,20 @@
 # jsmate
 
-#### Starting from zero
+#### Overview
+jsMate is a web-based chess application built initially over a time-boxed weekend.
+
+#### Kanban Board
+https://trello.com/b/rEdr94uM/jsmate-kanban-board
+
+#### Dependencies (* = coming soon)
+ - Node.js
+ - Connect
+ - Serve-Static
+ - *NancyFX
+ - *OWIN
+ - *SQLite
+
+#### Getting started from zero
 
 ~~~~~~~~~~~~~~~~~~~
 git clone https://github.com/ballance/jsmate.git
