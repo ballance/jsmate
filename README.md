@@ -3,8 +3,8 @@
 #### Overview
 jsMate is a web-based chess application built initially over a time-boxed weekend.
 
-#### Kanban Board
-https://trello.com/b/rEdr94uM/jsmate-kanban-board
+#### Planning / Status
+[Trello Board](https://trello.com/b/rEdr94uM/jsmate-kanban-board)
 
 #### Dependencies (* = coming soon)
  - Node.js
