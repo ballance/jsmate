@@ -9,40 +9,38 @@
     <meta name="viewport" content="width=960">
     <link href="res/css/main.css" rel="stylesheet">
     <link href="res/css/chess.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>-->
 </head>
 <body>
  <header>
     <p>
-        <img class='logo' src='res/img/logo.png' /><span class='headertext'>jsMate v<span id='versionLabel'>.001</span></span>
+        <img class='logo' src='res/img/logo.png' /><span class='headertext'>jsMate v<span id='versionLabel'>.01</span></span>
     </p>
 </header>
  <div id='main'>
     <article id='article'>
        <div class="board">
-        <!-- 1st -->
-        <div class="board-row">
-            <div class="block">&#9820;</div>
-            <div class="block">&#9822;</div>
-            <div class="block">&#9821;</div>
-            <div class="block">&#9819;</div>
-            <div class="block">&#9818;</div>
-            <div class="block">&#9821;</div>
-            <div class="block">&#9822;</div>
-            <div class="block">&#9820;</div>
+        <div class="board-row row-1">
+            <div class="block row1 col1"></div>
+            <div class="block row1 col2"></div>
+            <div class="block row1 col3">&#9821;</div>
+            <div class="block row1 col4">&#9819;</div>
+            <div class="block row1 col5">&#9818;</div>
+            <div class="block row1 col6">&#9821;</div>
+            <div class="block row1 col7">&#9822;</div>
+            <div class="block row1 col8">&#9820;</div>
         </div>
-        <!-- 2nd -->
         <div class="board-row">
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
-            <div class="block">&#9823;</div>
+            <div class="block row2 col1"></div>
+            <div class="block row2 col2"></div>
+            <div class="block row2 col3"></div>
+            <div class="block row2 col4"></div>
+            <div class="block row2 col5"></div>
+            <div class="block row2 col6"></div>
+            <div class="block row2 col7"></div>
+            <div class="block row2 col8"></div>
         </div>
-        <!-- 3th -->
         <div class="board-row">
             <div class="block"></div>
             <div class="block"></div>
@@ -54,7 +52,6 @@
             <div class="block"></div>
         </div>
         <div class="board-row">
-        <!-- 4st -->
             <div class="block"></div>
             <div class="block"></div>
             <div class="block"></div>
@@ -64,19 +61,7 @@
             <div class="block"></div>
             <div class="block"></div>
         </div>
-        <!-- 5th -->
          <div class="board-row">
-             <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-        </div>
-        <div class="board-row">
-         <!-- 6th -->
             <div class="block"></div>
             <div class="block"></div>
             <div class="block"></div>
@@ -86,31 +71,39 @@
             <div class="block"></div>
             <div class="block"></div>
         </div>
-        <!-- 7th -->
         <div class="board-row">
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
-            <div class="block">&#9817;</div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
         </div>
-        <!-- 8th -->
         <div class="board-row">
-            <div class="block">&#9814;</div>
-            <div class="block">&#9816;</div>
-            <div class="block">&#9815;</div>
-            <div class="block">&#9813;</div>
-            <div class="block">&#9812;</div>
-            <div class="block">&#9815;</div>
-            <div class="block">&#9816;</div>
-            <div class="block">&#9814;</div>
+            <div class="block row7 col1"></div>
+            <div class="block row7 col2"></div>
+            <div class="block row7 col3"></div>
+            <div class="block row7 col4"></div>
+            <div class="block row7 col5"></div>
+            <div class="block row7 col6"></div>
+            <div class="block row7 col7"></div>
+            <div class="block row7 col8"></div>
+        </div>
+        <div class="board-row">
+            <div class="block row8 col1"></div>
+            <div class="block row8 col2"></div>
+            <div class="block row8 col3"></div>
+            <div class="block row8 col4"></div>
+            <div class="block row8 col5"></div>
+            <div class="block row8 col6"></div>
+            <div class="block row8 col7"></div>
+            <div class="block row8 col8"></div>
         </div>
     </div>
     </article>
-    <nav>Choose...</nav>
+    <nav>Choose a piece...</nav>
     <aside>
         <table>
             <tr><td>A1 -> A2</td></tr>
