@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsMate.Service", "JsMate.Service.csproj", "{BA68998D-91FC-47D0-8F23-D8F6EF5BCB48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsMate.Api", "..\JsMate.Api\JsMate.Api.csproj", "{35460AA4-B94A-4B64-9418-7243EC3D2F01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsMate.Service.Test", "JsMate.Service.Test\JsMate.Service.Test.csproj", "{7D73DD51-A01D-4A07-8CCA-374B3A218E8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA68998D-91FC-47D0-8F23-D8F6EF5BCB48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA68998D-91FC-47D0-8F23-D8F6EF5BCB48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA68998D-91FC-47D0-8F23-D8F6EF5BCB48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA68998D-91FC-47D0-8F23-D8F6EF5BCB48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35460AA4-B94A-4B64-9418-7243EC3D2F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35460AA4-B94A-4B64-9418-7243EC3D2F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35460AA4-B94A-4B64-9418-7243EC3D2F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35460AA4-B94A-4B64-9418-7243EC3D2F01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D73DD51-A01D-4A07-8CCA-374B3A218E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D73DD51-A01D-4A07-8CCA-374B3A218E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D73DD51-A01D-4A07-8CCA-374B3A218E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D73DD51-A01D-4A07-8CCA-374B3A218E8E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
