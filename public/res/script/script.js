@@ -124,6 +124,10 @@ function clearBoardCookie() {
 	document.cookie = "boardId=; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 }
 
+function readBoardCookie() {
+	var currentBardId = document.cookie.replace(/(?:(?:^|.*;\s*)boardId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+	return currentBoardId;
+}
 
 
 function callApi() {
@@ -141,7 +145,9 @@ function callApi() {
 function retrieveBoardState()
 {
 	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
-	$.getJSON('http://localhost:9997/board/');
+	var boardId = readBoardCookie();
+
+	$.getJSON('http://localhost:9997/board/' + boardId)
 		.done(function(data) {
 			$('statuss').append(data.text);
 		})
@@ -160,6 +166,7 @@ $( document ).ready(function() {
 	clearBoardCookie();
 	setBoardCookie();
 
+	retrieveBoardState();
 	callApi();
 
 });
