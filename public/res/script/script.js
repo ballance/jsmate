@@ -112,12 +112,19 @@ function setBoardInitial()
 	});
 }
 
-function cookieActions() {
+function setBoardCookie() {
 	if (document.cookie.replace(/(?:(?:^|.*;\s*)instanceCookie\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
-    	alert("singleton");
     	document.cookie = "instanceCookie=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+		document.cookie = "boardId=" + createGuid() + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 	}
 }
+
+function clearBoardCookie() {
+	document.cookie = "instanceCookie=; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+	document.cookie = "boardId=; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+}
+
+
 
 function callApi() {
 	var promise = $.getJSON('http://hipsterjesus.com/api/');
@@ -131,11 +138,18 @@ function callApi() {
 	});
 }
 
+function retrieveBoardState()
+{
+
+}
+
 $( document ).ready(function() {
 	setVersion();
 	setBoardInitial();
 
-	callApi();
+	clearBoardCookie();
+	setBoardCookie();
 
+	callApi();
 
 });
