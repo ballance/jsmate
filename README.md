@@ -11,7 +11,7 @@ jsMate is a web-based chess application built initially over a [time-boxed weeke
 
 #### Dependencies (* = coming soon)
 | Dependency         | Installation |
-| ------------------ |:----------------:|
+| ------------------ | ------------ |
 | Node.js            | [Installer](https://nodejs.org/en/download/) |
 | connect            | `npm install connect` |
 | serve-static       | `npm install serve-static` |
