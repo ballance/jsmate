@@ -1,3 +1,5 @@
+const fadeInterval = 150;
+
 function setVersion() {
 	try	{
 		var ver = JSON.parse(readVersion('version.json')).version;
@@ -6,7 +8,7 @@ function setVersion() {
 	}
 	catch (e)
 	{
-
+		$('statuss').append('<br />' + e);
 	}
 }
 
@@ -38,6 +40,13 @@ function createGuid()
 	});
 	return guid;
 }
+
+// Extend jQuery to provide flash UX on pieces
+jQuery.fn.extend({
+  flashClick: function() {
+    return this.fadeIn(fadeInterval).fadeOut(fadeInterval).fadeIn(fadeInterval);
+    }});
+  
 
 function setBoardInitial()
 {
@@ -76,7 +85,6 @@ function setBoardInitial()
 		$('#statuss').append('<br />clicked a white pawn');
 	});
 
-
 	// Black
 
 	// Rooks
@@ -98,12 +106,14 @@ function setBoardInitial()
 	$(".block.row1.col6").click(function() { $('#statuss').append('<br />clicked black bishop 2');});
 
 	// King
-	$(".block.row1.col5").html('&#9818;');
-	$(".block.row1.col5").click(function() { $('#statuss').append('<br />clicked black king');});
+	var blackKing = $(".block.row1.col5");
+	blackKing.html('&#9818;');
+	blackKing.click(function() { $('#statuss').append('<br />clicked black king'); blackKing.flashClick();});
 	
 	// Queen
-	$(".block.row1.col4").html('&#9819;');
-	$(".block.row1.col4").click(function() { $('#statuss').append('<br />clicked black queen');});
+	var blackQueen = $(".block.row1.col4");
+	blackQueen.html('&#9819;');
+	blackQueen.click(function() { $('#statuss').append('<br />clicked black queen'); blackQueen.flashClick();});
 	
 	// Pawns
 	$(".block.row2.block").html('&#9823;');
