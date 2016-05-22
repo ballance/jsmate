@@ -39,4 +39,5 @@ source: https://msdn.microsoft.com/en-us/library/ms733768.aspx
 JsMate.Api.exe
 ~~~~~~~~~~~~~~~~~~
 
-.
+##### Helpful tools
+ - [LiteDB Shell](https://github.com/mbdavid/LiteDB/releases)
