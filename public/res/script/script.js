@@ -45,35 +45,35 @@ function setBoardInitial()
 
 	// Rooks
 	$(".block.row8.col1").html('&#9814');
-	$(".block.row8.col1").click(function() { console.log('clicked white rook 1');});
+	$(".block.row8.col1").click(function() { $('#statuss').append('<br />clicked white rook 1');});
 	$(".block.row8.col8").html('&#9814');
-	$(".block.row8.col8").click(function() { console.log('clicked white rook 2');});
+	$(".block.row8.col8").click(function() { $('#statuss').append('<br />clicked white rook 2');});
 
 	// Knights
 	$(".block.row8.col2").html('&#9816;');
-	$(".block.row8.col2").click(function() { console.log('clicked white knight 1');});
+	$(".block.row8.col2").click(function() { $('#statuss').append('<br />clicked white knight 1');});
 	$(".block.row8.col7").html('&#9816;');
-	$(".block.row8.col7").click(function() { console.log('clicked white knight 2');});
+	$(".block.row8.col7").click(function() { $('#statuss').append('<br />clicked white knight 2');});
 
 
 	// Knights
 	$(".block.row8.col3").html('&#9815;');
-	$(".block.row8.col3").click(function() { console.log('clicked white bishop 1');});
+	$(".block.row8.col3").click(function() { $('#statuss').append('<br />clicked white bishop 1');});
 	$(".block.row8.col6").html('&#9815;');
-	$(".block.row8.col6").click(function() { console.log('clicked white bishop 2');});
+	$(".block.row8.col6").click(function() { $('#statuss').append('<br />clicked white bishop 2');});
 
 	// Queen
 	$(".block.row8.col4").html('&#9813;');
-	$(".block.row8.col4").click(function() { console.log('clicked the white queen');});
+	$(".block.row8.col4").click(function() { $('#statuss').append('<br />clicked the white queen');});
 
 	// King
 	$(".block.row8.col5").html('&#9812;');
-	$(".block.row8.col5").click(function() { console.log('clicked the white king');});
+	$(".block.row8.col5").click(function() { $('#statuss').append('<br />clicked the white king');});
 	
 	// Pawns
 	$(".block.row7.block").html('&#9817;');
 	$(".block.row7.block").click(function() { 
-		console.log('clicked a white pawn');
+		$('#statuss').append('<br />clicked a white pawn');
 	});
 
 
@@ -81,34 +81,34 @@ function setBoardInitial()
 
 	// Rooks
 	$(".block.row1.col1").html('&#9820');
-	$(".block.row1.col1").click(function() { console.log('clicked black rook 1');});
+	$(".block.row1.col1").click(function() { $('#statuss').append('<br />clicked black rook 1');});
 	$(".block.row1.col8").html('&#9820');
-	$(".block.row1.col8").click(function() { console.log('clicked black rook 2');});
+	$(".block.row1.col8").click(function() { $('#statuss').append('<br />clicked black rook 2');});
 	
 	// Bishops
 	$(".block.row1.col2").html('&#9822;');
-	$(".block.row1.col2").click(function() { console.log('clicked black knight 1');});
+	$(".block.row1.col2").click(function() { $('#statuss').append('<br />clicked black knight 1');});
 	$(".block.row1.col7").html('&#9822;');
-	$(".block.row1.col7").click(function() { console.log('clicked black knight 2');});
+	$(".block.row1.col7").click(function() { $('#statuss').append('<br />clicked black knight 2');});
 
 	// Knights
 	$(".block.row1.col3").html('&#9821;');
-	$(".block.row1.col3").click(function() { console.log('clicked black bishop 1');});
+	$(".block.row1.col3").click(function() { $('#statuss').append('<br />clicked black bishop 1');});
 	$(".block.row1.col6").html('&#9821;');
-	$(".block.row1.col6").click(function() { console.log('clicked black bishop 2');});
+	$(".block.row1.col6").click(function() { $('#statuss').append('<br />clicked black bishop 2');});
 
 	// King
 	$(".block.row1.col5").html('&#9818;');
-	$(".block.row1.col5").click(function() { console.log('clicked black king');});
+	$(".block.row1.col5").click(function() { $('#statuss').append('<br />clicked black king');});
 	
 	// Queen
 	$(".block.row1.col4").html('&#9819;');
-	$(".block.row1.col4").click(function() { console.log('clicked black queen');});
+	$(".block.row1.col4").click(function() { $('#statuss').append('<br />clicked black queen');});
 	
 	// Pawns
 	$(".block.row2.block").html('&#9823;');
 	$(".block.row2.block").click(function() { 
-		console.log('clicked a black pawn');
+		$('#statuss').append('<br />clicked a black pawn');
 	});
 }
 
@@ -129,19 +129,6 @@ function readBoardCookie() {
 	return currentBoardId;
 }
 
-
-function callApi() {
-	var promise = $.getJSON('http://hipsterjesus.com/api/');
-
-	promise.done(function(data) {
-  		$('#rolling-log').append(data.text);
-	});
-
-	promise.fail(function() {
-  		$('#rolling-log').append('<p>Oh noes, something went wrong!</p>');
-	});
-}
-
 function retrieveBoardState()
 {
 	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
@@ -152,25 +139,25 @@ function retrieveBoardState()
 		.done(function(data) {
 			try
 			{
-				$('#statuss').append('retrieved board: ' + data.Id);
+				$('#statuss').append('<br />retrieved board: ' + data.Id);
 			}
 			catch(e)
 			{
-				$('#statuss').append('failed to deserialize json board')
+				$('#statuss').append('<br />failed to deserialize json board')
 			}
 		})
 		.fail(function() {
-			$('#statuss').append('<p>API call to ' + apiUri + ' failed</p>');
+			$('#statuss').append('<br /><p>API call to ' + apiUri + ' failed</p>');
 
 		})
 		.always(function() {
-			//$('#statuss').append('<p>API call completed as promised</p>');	
-			//console.log('API promise completed');		
+			//$('#statuss').append('<br /><p>API call completed as promised</p>');	
+			//$('#statuss').append('<br />API promise completed');		
 		})
 
 }
 
-$( document ).ready(function() {
+$(document).ready(function() {
 	setVersion();
 	setBoardInitial();
 
@@ -178,6 +165,4 @@ $( document ).ready(function() {
 	setBoardCookie();
 
 	retrieveBoardState();
-	//callApi();
-
 });
