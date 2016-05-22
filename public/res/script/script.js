@@ -1,7 +1,13 @@
 function setVersion() {
-	var ver = JSON.parse(readVersion('version.json')).version;
-	var versionLabel = document.getElementById("versionLabel");
-	versionLabel.innerHTML = ver;
+	try	{
+		var ver = JSON.parse(readVersion('version.json')).version;
+		var versionLabel = document.getElementById("versionLabel");
+		versionLabel.innerHTML = ver;
+	}
+	catch (e)
+	{
+
+	}
 }
 
 function readVersion(file)
@@ -22,6 +28,15 @@ function readVersion(file)
     versionRaw.send(null);
 
     return versionRawFound;
+}
+
+function createGuid()
+{
+	var guid = 'zzzzzzzz-zzzz-4zzz-tzzz-zzzzzzzzzzzz'.replace(/[zt]/g, function(c) {
+    	var r = Math.random()*16|0, v = c == 'z' ? r : (r&0x3|0x8);
+    	return v.toString(16);
+	});
+	return guid;
 }
 
 function setBoardInitial()
@@ -97,8 +112,30 @@ function setBoardInitial()
 	});
 }
 
+function cookieActions() {
+	if (document.cookie.replace(/(?:(?:^|.*;\s*)instanceCookie\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
+    	alert("singleton");
+    	document.cookie = "instanceCookie=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+	}
+}
+
+function callApi() {
+	var promise = $.getJSON('http://hipsterjesus.com/api/');
+
+	promise.done(function(data) {
+  		$('rolling-log').append(data.text);
+	});
+
+	promise.fail(function() {
+  		$('rolling-log').append('<p>Oh no, something went wrong!</p>');
+	});
+}
 
 $( document ).ready(function() {
 	setVersion();
 	setBoardInitial();
+
+	callApi();
+
+
 });
