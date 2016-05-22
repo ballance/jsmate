@@ -9,6 +9,10 @@ namespace JsMate.Service.Models
             PieceTeam = team;
         }
 
+        public Pawn()
+        {
+        }
+
         public new List<BoardPosition> GetValidMoves()
         {
             var candidatePositions = new List<BoardPosition>();

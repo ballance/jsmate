@@ -140,7 +140,17 @@ function callApi() {
 
 function retrieveBoardState()
 {
-
+	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
+	$.getJSON('http://localhost:9997/board/');
+		.done(function(data) {
+			$('statuss').append(data.text);
+		})
+		.fail(function() {
+			$('statuss').append('<p>API call failed');
+		})
+		.always(function() {
+			$('statuss').append('<p>API call completed as promised</p>');			
+		})
 }
 
 $( document ).ready(function() {

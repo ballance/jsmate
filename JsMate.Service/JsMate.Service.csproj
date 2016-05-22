@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LiteDB, Version=1.0.4.0, Culture=neutral, PublicKeyToken=5c2fff750805920e, processorArchitecture=MSIL">
+      <HintPath>packages\LiteDB.1.0.4\lib\net40\LiteDB.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
       <Private>True</Private>
@@ -49,27 +53,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
-    <Compile Include="HelloModule.cs" />
-    <Compile Include="Models\Bishop.cs" />
-    <Compile Include="Models\BoardLocation.cs" />
     <Compile Include="Models\BoardPosition.cs" />
     <Compile Include="Models\ChessBoard.cs" />
-    <Compile Include="Models\ChessPiece.cs" />
     <Compile Include="Models\ChessSquare.cs" />
     <Compile Include="Models\IChessBoard.cs" />
     <Compile Include="Models\IChessPiece.cs" />
-    <Compile Include="Models\King.cs" />
-    <Compile Include="Models\Knight.cs" />
-    <Compile Include="Models\Pawn.cs" />
+    <Compile Include="Models\Pieces\Bishop.cs" />
+    <Compile Include="Models\Pieces\ChessPiece.cs" />
+    <Compile Include="Models\Pieces\King.cs" />
+    <Compile Include="Models\Pieces\Knight.cs" />
+    <Compile Include="Models\Pieces\Pawn.cs" />
+    <Compile Include="Models\Pieces\Queen.cs" />
+    <Compile Include="Models\Pieces\Rook.cs" />
     <Compile Include="Models\PieceTeam.cs" />
-    <Compile Include="Models\PieceType.cs" />
-    <Compile Include="Models\Queen.cs" />
-    <Compile Include="Models\Rook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

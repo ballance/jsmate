@@ -2,6 +2,10 @@ namespace JsMate.Service.Models
 {
     public class BoardPosition
     {
+        public BoardPosition()
+        {
+            // Default ctor added to make litedb happy
+        }
         public BoardPosition(int? row, int? col)
         {
             row.ValidateRowCol();

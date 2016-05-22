@@ -11,7 +11,7 @@ namespace JsMate.Api
         {
             base.ConfigureApplicationContainer(container);
 
-            container.Register<JsonSerializer, CustomJsonSerializer>();
+            //container.Register<JsonSerializer, CustomJsonSerializer>();
         }
     }
 }

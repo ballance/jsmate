@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace JsMate.Service.Models
 {
@@ -15,6 +16,57 @@ namespace JsMate.Service.Models
     public class ChessBoard : IChessBoard
     {
         private bool _created = false;
+        private List<ChessPiece> _pieces = new List<ChessPiece>();
+
+        public string Id { get; private set; }
+        public List<ChessPiece> Pieces
+        {
+            get { return _pieces; }
+            set { _pieces = value; }
+        }
+
+        public ChessBoard(string id)
+        {
+            var boardGuid = Convert.ToString(id);
+            using (var db = new LiteDatabase(@"ChessData.db"))
+            {
+                var boards = db.GetCollection<ChessBoard>("chessBoards");
+                var foundBoardCollection = boards.Find(b => b.Id.Equals(boardGuid));
+                if (foundBoardCollection.Any())
+                {
+                    var foundBoard = foundBoardCollection.Single();
+                    _pieces = foundBoard.Pieces;
+                    Id = foundBoard.Id;
+                }
+
+            }
+
+            if (_created) return;
+
+            try
+            {
+                // If not already create set up initial chessboard state
+                _pieces.AddRange(SetInitialBoardState());
+                Id = id;
+                using (var db = new LiteDatabase(@"ChessData.db"))
+                {
+                    var boards = db.GetCollection<ChessBoard>("chessBoards");
+                    boards.Insert(this);
+                    boards.EnsureIndex(x => x.Id);
+                }
+                _created = true;
+            }
+            catch (Exception ex)
+            {
+                _created = false;
+            }
+        }
+        public ChessBoard()
+        {
+            // Added to support LiteDB.  Should only be referenced that way.
+        }
+
+        #region Comparison overrides
         protected bool Equals(ChessBoard other)
         {
             return Equals(_pieces, other.Pieces);
@@ -24,25 +76,7 @@ namespace JsMate.Service.Models
         {
             return (_pieces != null ? _pieces.GetHashCode() : 0);
         }
-
-        private List<ChessPiece> _pieces = new List<ChessPiece>();
-
-        public ChessBoard()
-        {
-            if (_created) return;
-
-            try
-            {
-                _pieces.AddRange(SetInitialBoardState());
-                _created = true;
-            }
-            catch (Exception)
-            {
-                _created = false;
-            }
-            // If not already create set up initial chessboard state
-           
-        }
+        #endregion
 
         private List<ChessPiece> SetInitialBoardState()
         {
@@ -94,12 +128,14 @@ namespace JsMate.Service.Models
             return initialPieces;
         }
 
-        public ChessBoard(List<ChessPiece> pieces)
+        public ChessBoard(List<ChessPiece> pieces, string id)
         {
+            Id = id;
             // TODO: Add validation
             _pieces.AddRange(pieces);
         }
 
+        
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -119,10 +155,6 @@ namespace JsMate.Service.Models
 
         }
 
-        public List<ChessPiece> Pieces
-        {
-            get { return _pieces; }
-            set { _pieces = value; }
-        }
+      
     }
 }
