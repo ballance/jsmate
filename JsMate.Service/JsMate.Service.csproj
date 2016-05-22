@@ -48,8 +48,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="HelloModule.cs" />
+    <Compile Include="Models\Bishop.cs" />
+    <Compile Include="Models\BoardLocation.cs" />
+    <Compile Include="Models\BoardPosition.cs" />
     <Compile Include="Models\ChessBoard.cs" />
+    <Compile Include="Models\ChessPiece.cs" />
+    <Compile Include="Models\ChessSquare.cs" />
+    <Compile Include="Models\IChessBoard.cs" />
+    <Compile Include="Models\IChessPiece.cs" />
+    <Compile Include="Models\King.cs" />
+    <Compile Include="Models\Knight.cs" />
+    <Compile Include="Models\Pawn.cs" />
+    <Compile Include="Models\PieceTeam.cs" />
+    <Compile Include="Models\PieceType.cs" />
+    <Compile Include="Models\Queen.cs" />
+    <Compile Include="Models\Rook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
