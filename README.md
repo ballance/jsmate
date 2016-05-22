@@ -10,12 +10,12 @@ jsMate is a web-based chess application built initially over a [time-boxed weeke
 [Trello Board](https://trello.com/b/rEdr94uM/jsmate-kanban-board)
 
 #### Dependencies (* = coming soon)
- - Node.js
- - Connect
- - Serve-Static
- - Nancy
- - Nancy.Hosting.Self
- - *LiteDB
+ - Node.js - [Installer](https://nodejs.org/en/download/)
+ - Connect - `npm install connect`
+ - Serve-Static - `npm install serve-static`
+ - Nancy - `Install-Package Nancy`
+ - Nancy.Hosting.Self - `Install-Package Nancy.Hosting.Self `
+ - LiteDB - `Install-Package LiteDB` 
 
 #### Getting started from zero
 
