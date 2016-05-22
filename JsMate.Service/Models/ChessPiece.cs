@@ -6,6 +6,10 @@ namespace JsMate.Service.Models
 {
     public class ChessPiece //: IChessPiece
     {
+        public ChessPiece()
+        {
+            
+        }
         public List<BoardPosition> GetValidMoves()
         {
             throw new NotImplementedException();
