@@ -15,7 +15,9 @@ namespace JsMate.Service.Models
 
     public class ChessBoard : IChessBoard
     {
-        private bool _created = false;
+        // TODO: Consider removing this flag
+        private bool _instantiated = false;
+
         private List<ChessPiece> _pieces = new List<ChessPiece>();
 
         public string Id { get; private set; }
@@ -30,18 +32,25 @@ namespace JsMate.Service.Models
             var boardGuid = Convert.ToString(id);
             using (var db = new LiteDatabase(@"ChessData.db"))
             {
-                var boards = db.GetCollection<ChessBoard>("chessBoards");
-                var foundBoardCollection = boards.Find(b => b.Id.Equals(boardGuid));
-                if (foundBoardCollection.Any())
+                try
                 {
-                    var foundBoard = foundBoardCollection.Single();
-                    _pieces = foundBoard.Pieces;
-                    Id = foundBoard.Id;
+                    var boards = db.GetCollection<ChessBoard>("chessBoards");
+                    var foundBoardCollection = boards.Find(b => b.Id.Equals(boardGuid));
+                    if (foundBoardCollection.Any())
+                    {
+                        var foundBoard = foundBoardCollection.Single();
+                        _pieces = foundBoard.Pieces;
+                        Id = foundBoard.Id;
+                        _instantiated = true;
+                    }
                 }
-
+                catch (Exception)
+                {
+                    Console.WriteLine($"Failed to retrieve existing board [{boardGuid}]");
+                }
             }
 
-            if (_created) return;
+            if (_instantiated) return;
 
             try
             {
@@ -54,11 +63,11 @@ namespace JsMate.Service.Models
                     boards.Insert(this);
                     boards.EnsureIndex(x => x.Id);
                 }
-                _created = true;
+                _instantiated = true;
             }
             catch (Exception ex)
             {
-                _created = false;
+                _instantiated = false;
             }
         }
         public ChessBoard()
@@ -84,46 +93,46 @@ namespace JsMate.Service.Models
             // Add Pawns
             for (var i = 0; i < 8; i++)
             {
-                initialPieces.Add(new Pawn(PieceTeam.White) {BoardPosition = new BoardPosition(6, i)});
-                initialPieces.Add(new Pawn(PieceTeam.Black) {BoardPosition = new BoardPosition(1, i)});
+                initialPieces.Add(new Pawn(PieceTeam.White) { BoardPosition = new BoardPosition(6, i) });
+                initialPieces.Add(new Pawn(PieceTeam.Black) { BoardPosition = new BoardPosition(1, i) });
             }
 
             // Add White Rooks
-            initialPieces.Add(new Rook() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 0)});
-            initialPieces.Add(new Rook() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 7)});
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 0) });
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 7) });
 
             // Add Black Rooks
-            initialPieces.Add(new Rook() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 0)});
-            initialPieces.Add(new Rook() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 7)});
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 0) });
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 7) });
 
             // Add White Knights
-            initialPieces.Add(new Knight() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 1)});
-            initialPieces.Add(new Knight() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 6)});
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 1) });
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 6) });
 
             // Add Black Knights
-            initialPieces.Add(new Knight() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 1)});
-            initialPieces.Add(new Knight() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 6)});
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 1) });
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 6) });
 
 
             // Add White Bishops
-            initialPieces.Add(new Bishop() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 2)});
-            initialPieces.Add(new Bishop() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 5)});
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 2) });
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 5) });
 
             // Add Black Bishops
-            initialPieces.Add(new Bishop() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 2)});
-            initialPieces.Add(new Bishop() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 5)});
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 2) });
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 5) });
 
             // Add White Queen
-            initialPieces.Add(new Queen() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 3)});
+            initialPieces.Add(new Queen() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 3) });
 
             // Add Black Queen
-            initialPieces.Add(new Queen() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 3)});
+            initialPieces.Add(new Queen() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 3) });
 
             // Add White King
-            initialPieces.Add(new King() {PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 4)});
+            initialPieces.Add(new King() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 4) });
 
             // Add Black King
-            initialPieces.Add(new King() {PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 4)});
+            initialPieces.Add(new King() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 4) });
 
             return initialPieces;
         }
@@ -135,7 +144,7 @@ namespace JsMate.Service.Models
             _pieces.AddRange(pieces);
         }
 
-        
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -150,11 +159,11 @@ namespace JsMate.Service.Models
             }
 
             // TODO: Find a cleaner way to make this comparison.  Goal is to ensure the same pieces are in the same places on both boards.
-            return _pieces.All(piece => chessBoard.Pieces.Contains(piece))  &&
+            return _pieces.All(piece => chessBoard.Pieces.Contains(piece)) &&
                    chessBoard.Pieces.All(piece2 => _pieces.Contains(piece2));
 
         }
 
-      
+
     }
 }

@@ -26,18 +26,24 @@ namespace JsMate.Api
             {
                 var boardId = parameters.Id.Value;
 
-                Console.WriteLine($"Attempt to load existing board [{boardId}], create new if none found");
-                IChessBoard cb = new ChessBoard(boardId);
+                try
+                {
+                    Console.WriteLine($"Attempt to load existing board [{boardId}], create new if none found");
+                    IChessBoard cb = new ChessBoard(boardId);
 
-                var ser = JsonConvert.SerializeObject(cb);
-               
-                Console.WriteLine($"Returning {ser}");
-                return ser;
+                    var ser = JsonConvert.SerializeObject(cb);
+
+                    //Console.WriteLine($"Returning {ser}");
+                    Console.WriteLine($"Found or created board [{boardId}]");
+
+                    return ser;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"Failed to create board for [{boardId}]");
+                    throw;
+                }
             };
-
-            //Get["/board/{id}"] = parameters => "received [" + parameters.Id.Value + "]";
         }
-
-     
     }
 }

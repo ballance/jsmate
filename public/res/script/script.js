@@ -146,8 +146,9 @@ function retrieveBoardState()
 {
 	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
 	var boardId = readBoardCookie();
-
-	$.getJSON('http://localhost:9997/board/' + boardId)
+	var apiUri = 'http://localhost:9997/board/' + boardId;
+	
+	$.getJSON(apiUri)
 		.done(function(data) {
 			try
 			{
@@ -159,12 +160,12 @@ function retrieveBoardState()
 			}
 		})
 		.fail(function() {
-			$('#statuss').append('<p>API call failed</p>');
+			$('#statuss').append('<p>API call to ' + apiUri + ' failed</p>');
 
 		})
 		.always(function() {
-			$('#statuss').append('<p>API call completed as promised</p>');	
-			console.log('API promise completed');		
+			//$('#statuss').append('<p>API call completed as promised</p>');	
+			//console.log('API promise completed');		
 		})
 
 }
