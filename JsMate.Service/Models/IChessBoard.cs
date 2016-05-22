@@ -1,0 +1,4 @@
+﻿namespace JsMate.Service.Models
+{
+   
+}
