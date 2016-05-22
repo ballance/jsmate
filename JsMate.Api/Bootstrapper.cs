@@ -1,4 +1,5 @@
-﻿using Nancy.TinyIoc;
+﻿using Nancy.Bootstrapper;
+using Nancy.TinyIoc;
 using Newtonsoft.Json;
 
 namespace JsMate.Api
@@ -12,6 +13,16 @@ namespace JsMate.Api
             base.ConfigureApplicationContainer(container);
 
             //container.Register<JsonSerializer, CustomJsonSerializer>();
+        }
+
+        protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
+        {
+            base.RequestStartup(container, pipelines, context);
+
+            pipelines.AfterRequest.AddItemToEndOfPipeline(c =>
+            {
+                c.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:9995";
+            });
         }
     }
 }

@@ -14,7 +14,7 @@
 
 </head>
 <body>
-	<img src="@Path['~/Content/nancy-logo.png']" alt="Nancy logo" /><br />
-	This view was rendered using the SuperSimpleViewEngine
+	<img height="200px" width="200px" src="http://localhost:9995/res/img/logo.png" alt="Default Logo" /><br />
+	<h4>jsMate API</h4>
 </body>
 </html>

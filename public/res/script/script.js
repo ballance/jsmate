@@ -125,7 +125,7 @@ function clearBoardCookie() {
 }
 
 function readBoardCookie() {
-	var currentBardId = document.cookie.replace(/(?:(?:^|.*;\s*)boardId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+	var currentBoardId = document.cookie.replace(/(?:(?:^|.*;\s*)boardId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 	return currentBoardId;
 }
 
@@ -134,11 +134,11 @@ function callApi() {
 	var promise = $.getJSON('http://hipsterjesus.com/api/');
 
 	promise.done(function(data) {
-  		$('rolling-log').append(data.text);
+  		$('#rolling-log').append(data.text);
 	});
 
 	promise.fail(function() {
-  		$('rolling-log').append('<p>Oh no, something went wrong!</p>');
+  		$('#rolling-log').append('<p>Oh noes, something went wrong!</p>');
 	});
 }
 
@@ -149,14 +149,24 @@ function retrieveBoardState()
 
 	$.getJSON('http://localhost:9997/board/' + boardId)
 		.done(function(data) {
-			$('statuss').append(data.text);
+			try
+			{
+				$('#statuss').append('retrieved board: ' + data.Id);
+			}
+			catch(e)
+			{
+				$('#statuss').append('failed to deserialize json board')
+			}
 		})
 		.fail(function() {
-			$('statuss').append('<p>API call failed');
+			$('#statuss').append('<p>API call failed</p>');
+
 		})
 		.always(function() {
-			$('statuss').append('<p>API call completed as promised</p>');			
+			$('#statuss').append('<p>API call completed as promised</p>');	
+			console.log('API promise completed');		
 		})
+
 }
 
 $( document ).ready(function() {
@@ -167,6 +177,6 @@ $( document ).ready(function() {
 	setBoardCookie();
 
 	retrieveBoardState();
-	callApi();
+	//callApi();
 
 });

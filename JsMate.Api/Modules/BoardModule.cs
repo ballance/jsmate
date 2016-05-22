@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using JsMate.Service.Models;
 using LiteDB;
 using Nancy;
@@ -24,10 +25,13 @@ namespace JsMate.Api
             Get["/board/{id}"] = parameters =>
             {
                 var boardId = parameters.Id.Value;
-              
+
+                Console.WriteLine($"Attempt to load existing board [{boardId}], create new if none found");
                 IChessBoard cb = new ChessBoard(boardId);
 
                 var ser = JsonConvert.SerializeObject(cb);
+               
+                Console.WriteLine($"Returning {ser}");
                 return ser;
             };
 
