@@ -18,27 +18,28 @@ namespace JsMate.Api
             Get["/move/"] = parameters => HttpStatusCode.BadRequest;
 
             // Attempt to load existing board, create new if none found
-            Get["/move/{id}/{team}/{piece}"] = parameters =>
+            Get["/move/{id}/{team}/{piece}/{pieceNumber}"] = parameters =>
             {
                 var boardId = parameters.Id.Value;
                 var team = parameters.Team.Value;
                 var piece = parameters.Piece.Value;
+                var pieceNumber = Convert.ToInt32(parameters.PieceNumber.Value);
+                
                 try
                 {
                     ChessBoard foundBoard = FindBoard(boardId);
 
-                    //var pieceToMove =
-                    //    foundBoard.Pieces.Single(
-                    //        x => x.PieceType.Equals(piece) && x.PieceTeam.Equals(team));
-
+                    // TODO: Clean up these messy conversions
                     var pieceToMove =
                         foundBoard.Pieces.Single(
-                            x => x.PieceType.Equals(piece) && x.PieceTeam.Equals(PieceTeam.Black));
+                            x => x.PieceType.Equals(piece) 
+                                && x.PieceTeam.Equals(team == "0" ? PieceTeam.Black : PieceTeam.White)
+                                && x.PieceNumber.Equals(pieceNumber));
                     
                     pieceToMove.BoardPosition.Row++;
 
 
-                    foundBoard.ValidateFriendlyFire();
+                    foundBoard.ValidateCollision();
                     pieceToMove.BoardPosition.ValidateBoardBounds();
                     
                     foundBoard.Update(foundBoard);

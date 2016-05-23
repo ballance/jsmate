@@ -13,6 +13,7 @@ namespace JsMate.Service.Models
         List<BoardPosition> GetValidMoves();
         void TakePiece();
         bool CanMove(int? destinationRow, int? destinationCol);
+        int PieceNumber { get; set; }
     }
 
     public class ChessPiece : IChessPiece

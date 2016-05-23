@@ -171,7 +171,7 @@ namespace JsMate.Service.Models
             }
         }
 
-        public void ValidateFriendlyFire()
+        public void ValidateCollision()
         {
             var result = Pieces.GroupBy(x => new { x.BoardPosition.Col,  x.BoardPosition.Row })
                 .Where(g => g.Count() > 1)
@@ -180,7 +180,7 @@ namespace JsMate.Service.Models
 
             if (result.Any())
             {
-                throw new InvalidOperationException("Friendly Fire!  Move not allowed!");
+                throw new InvalidOperationException("Collision!  Move not allowed!");
             }
         }
     }

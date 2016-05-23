@@ -2,7 +2,7 @@
 {
     public enum PieceTeam
     {
-        White,
-        Black
+        Black,
+        White
     }
 }

@@ -10,7 +10,6 @@
     <link href="res/css/main.css" rel="stylesheet">
     <link href="res/css/chess.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>-->
 </head>
 <body>
  <header>
@@ -21,7 +20,18 @@
  <div id='main'>
     <article id='article'>
        <div class="board">
+        <div class="board-row row-0">
+            <div class="block row0 col0"></div>
+            <div class="block row0 col1"></div>
+            <div class="block row0 col2"></div>
+            <div class="block row0 col3"></div>
+            <div class="block row0 col4"></div>
+            <div class="block row0 col5"></div>
+            <div class="block row0 col6"></div>
+            <div class="block row0 col7"></div>
+        </div>
         <div class="board-row row-1">
+            <div class="block row1 col0"></div>
             <div class="block row1 col1"></div>
             <div class="block row1 col2"></div>
             <div class="block row1 col3"></div>
@@ -29,9 +39,9 @@
             <div class="block row1 col5"></div>
             <div class="block row1 col6"></div>
             <div class="block row1 col7"></div>
-            <div class="block row1 col8"></div>
         </div>
         <div class="board-row">
+            <div class="block row2 col0"></div>
             <div class="block row2 col1"></div>
             <div class="block row2 col2"></div>
             <div class="block row2 col3"></div>
@@ -39,9 +49,9 @@
             <div class="block row2 col5"></div>
             <div class="block row2 col6"></div>
             <div class="block row2 col7"></div>
-            <div class="block row2 col8"></div>
         </div>
         <div class="board-row">
+            <div class="block row3 col0"></div>
             <div class="block row3 col1"></div>
             <div class="block row3 col2"></div>
             <div class="block row3 col3"></div>
@@ -49,9 +59,9 @@
             <div class="block row3 col5"></div>
             <div class="block row3 col6"></div>
             <div class="block row3 col7"></div>
-            <div class="block row3 col8"></div>
         </div>
         <div class="board-row">
+            <div class="block row4 col0"></div>
             <div class="block row4 col1"></div>
             <div class="block row4 col2"></div>
             <div class="block row4 col3"></div>
@@ -59,9 +69,9 @@
             <div class="block row4 col5"></div>
             <div class="block row4 col6"></div>
             <div class="block row4 col7"></div>
-            <div class="block row4 col8"></div>
         </div>
          <div class="board-row">
+            <div class="block row5 col0"></div>
             <div class="block row5 col1"></div>
             <div class="block row5 col2"></div>
             <div class="block row5 col3"></div>
@@ -69,9 +79,9 @@
             <div class="block row5 col5"></div>
             <div class="block row5 col6"></div>
             <div class="block row5 col7"></div>
-            <div class="block row5 col8"></div>
         </div>
         <div class="board-row">
+            <div class="block row6 col0"></div>
             <div class="block row6 col1"></div>
             <div class="block row6 col2"></div>
             <div class="block row6 col3"></div>
@@ -79,9 +89,9 @@
             <div class="block row6 col5"></div>
             <div class="block row6 col6"></div>
             <div class="block row6 col7"></div>
-            <div class="block row6 col8"></div>
         </div>
         <div class="board-row">
+            <div class="block row7 col0"></div>
             <div class="block row7 col1"></div>
             <div class="block row7 col2"></div>
             <div class="block row7 col3"></div>
@@ -89,17 +99,6 @@
             <div class="block row7 col5"></div>
             <div class="block row7 col6"></div>
             <div class="block row7 col7"></div>
-            <div class="block row7 col8"></div>
-        </div>
-        <div class="board-row">
-            <div class="block row8 col1"></div>
-            <div class="block row8 col2"></div>
-            <div class="block row8 col3"></div>
-            <div class="block row8 col4"></div>
-            <div class="block row8 col5"></div>
-            <div class="block row8 col6"></div>
-            <div class="block row8 col7"></div>
-            <div class="block row8 col8"></div>
         </div>
     </div>
     </article>
@@ -108,7 +107,7 @@
         <p><button id='refreshboard'>Refresh Board</button>
         <p><button id='clearStatus'>Clear Status</button>
         <p><button id='newBoard'>New Board</button>
-        <p><button id='movePawn'>Move Black Queen forward</button>
+        <p><button id='movePawn'>Move Black Pawn forward</button>
     </nav>
     <aside>
         <h4>Status</h4>
