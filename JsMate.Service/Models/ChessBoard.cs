@@ -91,46 +91,46 @@ namespace JsMate.Service.Models
             // Add Pawns
             for (var i = 0; i < 8; i++)
             {
-                initialPieces.Add(new Pawn(PieceTeam.White) { BoardPosition = new BoardPosition(6, i) });
-                initialPieces.Add(new Pawn(PieceTeam.Black) { BoardPosition = new BoardPosition(1, i) });
+                initialPieces.Add(new Pawn(PieceTeam.White) { BoardPosition = new BoardPosition(6, i), PieceNumber = i + 1});
+                initialPieces.Add(new Pawn(PieceTeam.Black) { BoardPosition = new BoardPosition(1, i), PieceNumber = i + 1 });
             }
 
             // Add White Rooks
-            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 0) });
-            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 7) });
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 0), PieceNumber = 1 });
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 7), PieceNumber = 2 });
 
             // Add Black Rooks
-            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 0) });
-            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 7) });
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 0), PieceNumber = 1 });
+            initialPieces.Add(new Rook() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 7), PieceNumber = 2 });
 
             // Add White Knights
-            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 1) });
-            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 6) });
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 1), PieceNumber = 1 });
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 6), PieceNumber = 2 });
 
             // Add Black Knights
-            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 1) });
-            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 6) });
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 1), PieceNumber = 1 });
+            initialPieces.Add(new Knight() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 6), PieceNumber = 2 });
 
 
             // Add White Bishops
-            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 2) });
-            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 5) });
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 2), PieceNumber = 1 });
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 5), PieceNumber = 2 });
 
             // Add Black Bishops
-            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 2) });
-            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 5) });
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 2), PieceNumber = 1 });
+            initialPieces.Add(new Bishop() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 5), PieceNumber = 2 });
 
             // Add White Queen
-            initialPieces.Add(new Queen() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 3) });
+            initialPieces.Add(new Queen() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 3), PieceNumber = 1 });
 
             // Add Black Queen
-            initialPieces.Add(new Queen() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 3) });
+            initialPieces.Add(new Queen() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 3), PieceNumber = 1 });
 
             // Add White King
-            initialPieces.Add(new King() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 4) });
+            initialPieces.Add(new King() { PieceTeam = PieceTeam.White, BoardPosition = new BoardPosition(7, 4), PieceNumber = 1 });
 
             // Add Black King
-            initialPieces.Add(new King() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 4) });
+            initialPieces.Add(new King() { PieceTeam = PieceTeam.Black, BoardPosition = new BoardPosition(0, 4), PieceNumber = 1 });
 
             return initialPieces;
         }
