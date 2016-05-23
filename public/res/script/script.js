@@ -97,7 +97,34 @@ function readBoardIdFromCookie() {
 function clearBoard() {
 	for (var i = 0; i < 8; i++) {
 		for (var j = 0; j < 8; j++)	{
-			$('.block.row' + i + '.col' + j).html('');
+			var selectorForClear = '.block.row' + i + '.col' + j;
+			$(selectorForClear).html('');
+			$(selectorForClear).unbind('click');
+		}
+	}
+}
+
+function clearBoardHighlights()
+{
+	for (var i = 0; i < 8; i++) {
+		for (var j = 0; j < 8; j++)	{
+			var selectorForClear = '.block.row' + i + '.col' + j;
+			
+			$(selectorForClear).removeClass('highlight');
+		}
+	}	
+}
+
+function setBoardClickHandlers() {
+	for (var i = 0; i < 8; i++) {
+		for (var j = 0; j < 8; j++)	{
+			var selectorForBlankHandler = '.block.row' + i + '.col' + j;
+			
+			$(selectorForBlankHandler).click(function () {
+				selected = this.className;
+				writeStatus('selected blank square' + selected);
+			})
+
 		}
 	}
 }
@@ -140,22 +167,38 @@ function loadBoardFromReceivedData(data)
 	{
 		clearBoard();
 
+		setBoardClickHandlers();
+
 		var pieceArray = data.Pieces;
-		writeStatus('Retrieved [' + pieceArray.length + '] pieces.')
+
 		for (var i = 0; i < pieceArray.length; i++) {
 			var piece = pieceArray[i];
 
 			var pieceHtml = determinePieceHtml(piece);
+
+			var pieceSelector = '.block.row' + piece.BoardPosition.Row + '.col' + piece.BoardPosition.Col;
+
+			$(pieceSelector).html(pieceHtml);
 			
-			$('.block.row' + piece.BoardPosition.Row + '.col' + piece.BoardPosition.Col).html(pieceHtml);
+			$(pieceSelector).unbind('click'); // Unbind existing blank space click event(s)
+
+			$(pieceSelector).click(function (e) {
+				e.preventDefault();
+				clearBoardHighlights();
+				$(this).addClass('highlight');
+
+				selected = this.className;
+				writeStatus('selected ' + selected);
+				//writeStatus('selected ' + selectedClick.PieceType + ' / pieceNumber ' + selectedClick.PieceNumber  + ' / color ' + selectedClick.PieceTeam + ' / col ' + selectedClick.BoardPosition.Col + ' / row ' + selectedClick.BoardPosition.Row)
+			})
 		}
+
 	}	
 	catch (e)
 	{
 		writeStatus(e);
 	}
 }
-
 
 function retrieveBoardState()
 {
@@ -181,8 +224,6 @@ function retrieveBoardState()
 		.fail(function() {
 			writeStatus('<p>API call to ' + apiUri + ' failed</p>');
 
-		})
-		.always(function() {
 		})
 }
 
@@ -214,8 +255,7 @@ function wireUpButtons()
 		retrieveBoardState();
 	});
 
-	$('#movePawn').click(function() {
-
+	$('#moveBlackPawn1').click(function() {
 		var boardId = readBoardIdFromCookie();
 	
 		var apiUri = 'http://localhost:9997/move/' + boardId + '/0/Pawn/1';
@@ -239,9 +279,42 @@ function wireUpButtons()
 			.always(function() {
 				retrieveBoardState();
 			})
+	});
 
+	$('#moveWhitePawn1').click(function() {
+		var boardId = readBoardIdFromCookie();
+
+		var apiUri = 'http://localhost:9997/move/' + boardId + '/1/Pawn/1';
+		writeStatus('moving piece: ' + apiUri);
+
+		$.getJSON(apiUri)
+			.done(function(data) {
+				try
+				{
+					writeStatus('moved board: ' + data);
+				}
+				catch(e)
+				{
+					writeStatus('failed to deserialize json move')
+				}
+			})
+			.fail(function() {
+				writeStatus('<p>API call to ' + apiUri + ' failed</p>');
+
+			})
+			.always(function() {
+				retrieveBoardState();
+			})
+	});
+
+	$('#showMoves').click(function() {
+		var selectedRow = selected;
+		var selectedColumn = selected;
+		alert(selected);
 	});
 }
+
+var selectedPiece = null;
 
 $(document).ready(function() {
 	wireUpButtons();
