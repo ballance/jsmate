@@ -124,8 +124,11 @@ function setBoardInitial()
 
 function setBoardCookie() {
 	if (document.cookie.replace(/(?:(?:^|.*;\s*)instanceCookie\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
+    	var newGuid = createGuid();
     	document.cookie = "instanceCookie=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-		document.cookie = "boardId=" + createGuid() + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+		document.cookie = "boardId=" + newGiud + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+		$('#statuss').append('wrote boardid cookie with: ' + newGuid);
+	
 	}
 }
 
@@ -136,6 +139,7 @@ function clearBoardCookie() {
 
 function readBoardCookie() {
 	var currentBoardId = document.cookie.replace(/(?:(?:^|.*;\s*)boardId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+	$('#statuss').append('read id from cookie: ' + currentBoardId);
 	return currentBoardId;
 }
 
@@ -143,6 +147,8 @@ function retrieveBoardState()
 {
 	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
 	var boardId = readBoardCookie();
+	$('#statuss').append('retrieveBoardState got id: ' + boardId);
+	
 	var apiUri = 'http://localhost:9997/board/' + boardId;
 	
 	$.getJSON(apiUri)
@@ -171,7 +177,7 @@ $(document).ready(function() {
 	setVersion();
 	setBoardInitial();
 
-	clearBoardCookie();
+	//clearBoardCookie();
 	setBoardCookie();
 
 	retrieveBoardState();
