@@ -102,6 +102,38 @@ function clearBoard() {
 	}
 }
 
+function determinePieceHtml(piece) {
+	var pieceHtml = '&#9785;' // Default to sad face if not found
+	switch(piece.PieceType) {
+		case "Queen":
+			pieceHtml = QueenHtml;
+			break;
+		case "King":
+			pieceHtml = KingHtml;
+			break;
+		case "Bishop":
+			pieceHtml = BishopHtml;
+			break;
+		case "Knight":
+			pieceHtml = KnightHtml;
+			break;
+		case "Rook":
+			pieceHtml = RookHtml;
+			break;
+		case "Pawn":
+			pieceHtml = PawnHtml;
+			break;
+	}
+
+	if (piece.PieceTeam == '0') {
+		pieceHtml = pieceHtml.Black;
+	}
+	else {
+		pieceHtml = pieceHtml.White;
+	}
+	return pieceHtml;
+}
+
 function loadBoardFromReceivedData(data)
 {
 	try
@@ -113,46 +145,15 @@ function loadBoardFromReceivedData(data)
 		for (var i = 0; i < pieceArray.length; i++) {
 			var piece = pieceArray[i];
 
-			var pieceHtml = '&#9785;';  // default sad face
-			switch(piece.PieceType) 
-			{
-				case "Queen":
-					pieceHtml = QueenHtml;
-					break;
-				case "King":
-					pieceHtml = KingHtml;
-					break;
-				case "Bishop":
-					pieceHtml = BishopHtml;
-					break;
-				case "Knight":
-					pieceHtml = KnightHtml;
-					break;
-				case "Rook":
-					pieceHtml = RookHtml;
-					break;
-				case "Pawn":
-					pieceHtml = PawnHtml;
-					break;
-			}
-
-			if (piece.PieceTeam == '0') {
-				pieceHtml = pieceHtml.Black;
-			}
-			else {
-				pieceHtml = pieceHtml.White;
-			}
-
-
+			var pieceHtml = determinePieceHtml(piece);
+			
 			$('.block.row' + piece.BoardPosition.Row + '.col' + piece.BoardPosition.Col).html(pieceHtml);
-			//writeStatus(piece.PieceType + ' / pieceNumber ' + piece.PieceNumber  + ' / color ' + piece.PieceTeam + ' / col ' + piece.BoardPosition.Col + ' / row ' + piece.BoardPosition.Row);
 		}
 	}	
 	catch (e)
 	{
 		writeStatus(e);
 	}
-	//setBoardInitial();
 }
 
 
@@ -168,7 +169,7 @@ function retrieveBoardState()
 		.done(function(data) {
 			try
 			{
-				writeStatus('Success! Retrieved board: [' + data.Id + ']');
+				writeStatus('Successfully rec`d board: [' + data.Id + ']');
 
 				loadBoardFromReceivedData(data);
 			}
@@ -182,8 +183,6 @@ function retrieveBoardState()
 
 		})
 		.always(function() {
-			//writeStatus('<p>API call completed as promised</p>');	
-			//writeStatus('APIprom ise completed');		
 		})
 }
 
@@ -196,8 +195,6 @@ function writeStatus(statusMessage)
 {
 	$('#statuss').append('<br />' + statusMessage);
 }
-
-
 
 function wireUpButtons()
 {
@@ -244,20 +241,11 @@ function wireUpButtons()
 			})
 
 	});
-
-
 }
 
 $(document).ready(function() {
 	wireUpButtons();
-
 	setVersion();
-	//clearBoardCookie();
 	setBoardCookie();
-
 	retrieveBoardState();
-
-	//setBoardInitial();
-
-
 });
