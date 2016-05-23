@@ -14,8 +14,8 @@
             {
                 host.Start();
 
-                Console.WriteLine("Your application is running on " + uri);
-                Console.WriteLine("Press any [Enter] to close the host.");
+                Console.WriteLine("jsMate API is running on " + uri);
+                Console.WriteLine("Press [Enter] to close the host.");
                 Console.ReadLine();
             }
         }
