@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace JsMate.Service.Models
+namespace JsMate.Service.Models.Pieces
 {
     public class Knight : ChessPiece
     {
@@ -14,7 +13,7 @@ namespace JsMate.Service.Models
 
         public override List<BoardPosition> GetValidMoves()
         {
-            var candidatePositions = new List<BoardPosition>();
+            var candidatePositions = new CandidatePositions();
 
             // NW
             candidatePositions.Add(new BoardPosition(BoardPosition.Col-1, BoardPosition.Row-2));
@@ -40,7 +39,7 @@ namespace JsMate.Service.Models
             // WS
             candidatePositions.Add(new BoardPosition(BoardPosition.Col-2, BoardPosition.Row-1));
 
-            return candidatePositions;
+            return candidatePositions.BoardPositions;
         }
     }
 }

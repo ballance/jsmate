@@ -111,6 +111,8 @@ function clearBoardHighlights()
 			var selectorForClear = '.block.row' + i + '.col' + j;
 			
 			$(selectorForClear).removeClass('highlight');
+			$(selectorForClear).removeClass('possibleMove');
+			$(selectorForClear).removeClass('possibleAttack');
 		}
 	}	
 }
@@ -188,7 +190,9 @@ function loadBoardFromReceivedData(data)
 				$(this).addClass('highlight');
 
 				selected = this.id;
-				writeStatus('selected ' + selected);
+				//writeStatus('selected ' + selected);
+
+				showMoves();
 				//writeStatus('selected ' + selectedClick.PieceType + ' / pieceNumber ' + selectedClick.PieceNumber  + ' / color ' + selectedClick.PieceTeam + ' / col ' + selectedClick.BoardPosition.Col + ' / row ' + selectedClick.BoardPosition.Row)
 			})
 		}
@@ -227,6 +231,42 @@ function retrieveBoardState()
 		})
 }
 
+function showMoves() {
+	var boardId = readBoardIdFromCookie();
+
+	var apiUri = 'http://localhost:9997/showmoves/' + boardId + '/' + selected;
+	writeStatus('Getting moves for selected: ' + apiUri);
+
+	$.getJSON(apiUri)
+		.done(function(data) {
+			try	{
+				writeStatus('Found [' + data.length +'] candidate moves.');
+				
+				for (var i = 0; i < data.length; i++) {
+					writeStatus('possible move: ' + data[i].Col + ',' + data[i].Row);
+
+					var pieceSelector = '.block.row' + data[i].Col + '.col' + data[i].Row;
+					if (data[i].AttackPosition == false) {
+						$(pieceSelector).addClass('possibleMove');
+					}
+					else {
+						$(pieceSelector).addClass('possibleAttack');	
+					}
+				}
+			}
+			catch(e)
+			{
+				writeStatus('failed to deserialize json showMoves')
+			}
+		})
+		.fail(function() {
+			writeStatus('<p>API call to ' + apiUri + ' failed</p>');
+
+		})
+		.always(function() {
+		})
+}
+
 function clearStatus()
 {
 	$('#statuss').html('');
@@ -257,10 +297,10 @@ function wireUpButtons()
 		retrieveBoardState();
 	});
 
-	$('#moveBlackPawn1').click(function() {
+	$('#moveBlackPawn2').click(function() {
 		var boardId = readBoardIdFromCookie();
 	
-		var apiUri = 'http://localhost:9997/move/' + boardId + '/0/Pawn/1';
+		var apiUri = 'http://localhost:9997/move/' + boardId + '/0/Pawn/2';
 		writeStatus('moving piece: ' + apiUri);
 
 		$.getJSON(apiUri)
@@ -279,14 +319,15 @@ function wireUpButtons()
 
 			})
 			.always(function() {
+				clearBoardHighlights();
 				retrieveBoardState();
 			})
 	});
 
-	$('#moveWhitePawn1').click(function() {
+	$('#moveWhitePawn2').click(function() {
 		var boardId = readBoardIdFromCookie();
 
-		var apiUri = 'http://localhost:9997/move/' + boardId + '/1/Pawn/1';
+		var apiUri = 'http://localhost:9997/move/' + boardId + '/1/Pawn/2';
 		writeStatus('moving piece: ' + apiUri);
 
 		$.getJSON(apiUri)
@@ -305,34 +346,13 @@ function wireUpButtons()
 
 			})
 			.always(function() {
+				clearBoardHighlights();
 				retrieveBoardState();
 			})
 	});
 
 	$('#showMoves').click(function() {
-		var boardId = readBoardIdFromCookie();
-
-		var apiUri = 'http://localhost:9997/showmoves/' + boardId + '/' + selected;
-		writeStatus('Getting moves for selected: ' + apiUri);
-
-		$.getJSON(apiUri)
-			.done(function(data) {
-				try
-				{
-					writeStatus('found moves: ' + data);
-				}
-				catch(e)
-				{
-					writeStatus('failed to deserialize json showMoves')
-				}
-			})
-			.fail(function() {
-				writeStatus('<p>API call to ' + apiUri + ' failed</p>');
-
-			})
-			.always(function() {
-				//retrieveBoardState();
-			})
+		showMoves();
 	});
 }
 

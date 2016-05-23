@@ -102,6 +102,16 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     font-weight: bold;
 }
 
+.possibleMove {
+    background-color: rgba(255, 255, 0, .4) !important;
+    font-weight: bold;
+}
+
+.possibleAttack {
+    background-color: rgba(255, 0, 0, .4) !important;
+    font-weight: bold;
+}
+
 .jsMate-button {
   width: 95% !important;
   text-align: left;

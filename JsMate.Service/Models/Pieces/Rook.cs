@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace JsMate.Service.Models
+namespace JsMate.Service.Models.Pieces
 {
     public class Rook : ChessPiece
     {
@@ -13,21 +12,33 @@ namespace JsMate.Service.Models
         
         public override List<BoardPosition> GetValidMoves()
         {
-            var candidatePositions = new List<BoardPosition>();
+            var candidatePositions = new CandidatePositions();
 
             // N
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row));
-        
+            for (int n = 1; n < 7; n++)
+            {
+                candidatePositions.Add(new BoardPosition(BoardPosition.Col - n, BoardPosition.Row));
+            }
+
             // E
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + 1));
-        
+            for (int e = 1; e < 7; e++)
+            {
+                candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + e));
+            }
+
             // S
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row));
+            for (int s = 1; s < 7; s++)
+            {
+                candidatePositions.Add(new BoardPosition(BoardPosition.Col + s, BoardPosition.Row));
+            }
+            
 
             // W
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row - 1));
-
-            return candidatePositions;
+            for (int w = 1; w < 7; w++)
+            {
+                candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row - w));
+            }
+            return candidatePositions.BoardPositions;
         }
     }
 }

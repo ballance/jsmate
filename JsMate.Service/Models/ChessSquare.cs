@@ -1,4 +1,5 @@
 using System;
+using JsMate.Service.Models.Pieces;
 
 namespace JsMate.Service.Models
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JsMate.Service.Models.Pieces;
 using LiteDB;
 
 namespace JsMate.Service.Models

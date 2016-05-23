@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
-namespace JsMate.Service.Models
+namespace JsMate.Service.Models.Pieces
 {
     public interface IChessPiece
     {
