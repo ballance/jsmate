@@ -101,3 +101,29 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     background-color: rgba(0, 255, 0, .4) !important;
     font-weight: bold;
 }
+
+.jsMate-button {
+  width: 95% !important;
+  text-align: left;
+  display: inline-block;
+  padding: 6px 12px !important;
+  margin: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+
+.jsMate-secondary-button {
+  background-color: #777;
+  border-color: #666;
+}

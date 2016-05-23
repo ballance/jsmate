@@ -187,7 +187,7 @@ function loadBoardFromReceivedData(data)
 				clearBoardHighlights();
 				$(this).addClass('highlight');
 
-				selected = this.className;
+				selected = this.id;
 				writeStatus('selected ' + selected);
 				//writeStatus('selected ' + selectedClick.PieceType + ' / pieceNumber ' + selectedClick.PieceNumber  + ' / color ' + selectedClick.PieceTeam + ' / col ' + selectedClick.BoardPosition.Col + ' / row ' + selectedClick.BoardPosition.Row)
 			})
@@ -240,6 +240,7 @@ function writeStatus(statusMessage)
 function wireUpButtons()
 {
 	$('#refreshboard').click(function() {
+		clearBoardHighlights();
 		retrieveBoardState();
 	});
 
@@ -252,6 +253,7 @@ function wireUpButtons()
 		clearBoardCookie();
 		clearStatus();
 		setBoardCookie();
+		clearBoardHighlights();
 		retrieveBoardState();
 	});
 
@@ -308,9 +310,29 @@ function wireUpButtons()
 	});
 
 	$('#showMoves').click(function() {
-		var selectedRow = selected;
-		var selectedColumn = selected;
-		alert(selected);
+		var boardId = readBoardIdFromCookie();
+
+		var apiUri = 'http://localhost:9997/showmoves/' + boardId + '/' + selected;
+		writeStatus('Getting moves for selected: ' + apiUri);
+
+		$.getJSON(apiUri)
+			.done(function(data) {
+				try
+				{
+					writeStatus('found moves: ' + data);
+				}
+				catch(e)
+				{
+					writeStatus('failed to deserialize json showMoves')
+				}
+			})
+			.fail(function() {
+				writeStatus('<p>API call to ' + apiUri + ' failed</p>');
+
+			})
+			.always(function() {
+				//retrieveBoardState();
+			})
 	});
 }
 

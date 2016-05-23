@@ -11,7 +11,7 @@ namespace JsMate.Service.Models
 
         public override string PieceType => typeof(Rook).Name;
         
-        public new List<BoardPosition> GetValidMoves()
+        public override List<BoardPosition> GetValidMoves()
         {
             var candidatePositions = new List<BoardPosition>();
 

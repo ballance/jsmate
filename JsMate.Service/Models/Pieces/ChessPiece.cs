@@ -27,7 +27,7 @@ namespace JsMate.Service.Models
 
         public virtual string PieceType { get; }
 
-        public List<BoardPosition> GetValidMoves()
+        public virtual List<BoardPosition> GetValidMoves()
         {
             throw new NotImplementedException();
         }
