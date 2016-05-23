@@ -15,10 +15,13 @@ namespace JsMate.Api
             // Default Board
             Get["/board/"] = parameters =>
             {
-                IChessBoard cb = new ChessBoard(Guid.NewGuid().ToString());
+                var boardId = Guid.NewGuid().ToString();
 
-                var ser = JsonConvert.SerializeObject(cb);
-                return ser;
+                return FindOrCreateBoard(boardId);
+                //IChessBoard cb = new ChessBoard(Guid.NewGuid().ToString());
+
+                //var ser = JsonConvert.SerializeObject(cb);
+                //return ser;
             };
 
             // Attempt to load existing board, create new if none found
@@ -26,24 +29,29 @@ namespace JsMate.Api
             {
                 var boardId = parameters.Id.Value;
 
-                try
-                {
-                    Console.WriteLine($"Attempt to load existing board [{boardId}], create new if none found");
-                    IChessBoard cb = new ChessBoard(boardId);
-
-                    var ser = JsonConvert.SerializeObject(cb);
-
-                    //Console.WriteLine($"Returning {ser}");
-                    Console.WriteLine($"Found or created board [{boardId}]");
-
-                    return ser;
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine($"Failed to create board for [{boardId}]");
-                    throw;
-                }
+                return FindOrCreateBoard(boardId);
             };
+        }
+
+        private static string FindOrCreateBoard(string boardId)
+        {
+            try
+            {
+                Console.WriteLine($"Attempt to load existing board [{boardId}], create new if none found");
+                IChessBoard cb = new ChessBoard(boardId);
+
+                var ser = JsonConvert.SerializeObject(cb);
+
+                //Console.WriteLine($"Returning {ser}");
+                Console.WriteLine($"Found or created board [{boardId}]");
+
+                return ser;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Failed to create board for [{boardId}]");
+                throw;
+            }
         }
     }
 }
