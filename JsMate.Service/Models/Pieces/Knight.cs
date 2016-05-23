@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace JsMate.Service.Models
@@ -7,6 +8,9 @@ namespace JsMate.Service.Models
         public Knight()
         {
         }
+
+
+        public string PieceType => typeof(Knight).Name;
 
         public new List<BoardPosition> GetValidMoves()
         {

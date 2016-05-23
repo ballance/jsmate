@@ -10,6 +10,7 @@ namespace JsMate.Service.Models
         {
             
         }
+        
         public List<BoardPosition> GetValidMoves()
         {
             throw new NotImplementedException();

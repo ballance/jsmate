@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JsMate.Service.Models
 {
@@ -7,6 +8,8 @@ namespace JsMate.Service.Models
         public Bishop()
         {
         }
+
+        public string PieceType => typeof(Bishop).Name;
 
         public new List<BoardPosition> GetValidMoves()
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JsMate.Service.Models
 {
@@ -8,6 +9,8 @@ namespace JsMate.Service.Models
         {
         }
 
+        public string PieceType => typeof(Rook).Name;
+        
         public new List<BoardPosition> GetValidMoves()
         {
             var candidatePositions = new List<BoardPosition>();
@@ -24,7 +27,6 @@ namespace JsMate.Service.Models
             // W
             candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow - 1));
 
-     
             return candidatePositions;
         }
     }

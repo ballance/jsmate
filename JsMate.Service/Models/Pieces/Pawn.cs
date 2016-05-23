@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JsMate.Service.Models
 {
@@ -12,6 +13,8 @@ namespace JsMate.Service.Models
         public Pawn()
         {
         }
+
+        public string PieceType => typeof(Pawn).Name;
 
         public new List<BoardPosition> GetValidMoves()
         {

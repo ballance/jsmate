@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace JsMate.Service.Models
@@ -8,6 +9,7 @@ namespace JsMate.Service.Models
         {
         }
 
+        public string PieceType => typeof(Queen).Name;
         public new List<BoardPosition> GetValidMoves()
         {
             var candidatePositions = new List<BoardPosition>();
