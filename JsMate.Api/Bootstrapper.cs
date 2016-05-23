@@ -11,8 +11,6 @@ namespace JsMate.Api
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
             base.ConfigureApplicationContainer(container);
-
-            //container.Register<JsonSerializer, CustomJsonSerializer>();
         }
 
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
