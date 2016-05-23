@@ -123,13 +123,19 @@ function setBoardInitial()
 }
 
 function setBoardCookie() {
+	//$('#statuss').append('<br />start');
+	
 	if (document.cookie.replace(/(?:(?:^|.*;\s*)instanceCookie\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
     	var newGuid = createGuid();
     	document.cookie = "instanceCookie=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-		document.cookie = "boardId=" + newGiud + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-		$('#statuss').append('wrote boardid cookie with: ' + newGuid);
-	
+		document.cookie = "boardId=" + newGuid + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+		//$('#statuss').append('<br />wrote boardid cookie with: ' + newGuid);
 	}
+	else
+	{
+		//$('#statuss').append('<br />nope');
+	}
+	//$('#statuss').append('<br />end');
 }
 
 function clearBoardCookie() {
@@ -137,17 +143,17 @@ function clearBoardCookie() {
 	document.cookie = "boardId=; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 }
 
-function readBoardCookie() {
+function readBoardIdFromCookie() {
 	var currentBoardId = document.cookie.replace(/(?:(?:^|.*;\s*)boardId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-	$('#statuss').append('read id from cookie: ' + currentBoardId);
+	//$('#statuss').append('<br />read id from cookie: ' + currentBoardId);
 	return currentBoardId;
 }
 
 function retrieveBoardState()
 {
 	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
-	var boardId = readBoardCookie();
-	$('#statuss').append('retrieveBoardState got id: ' + boardId);
+	var boardId = readBoardIdFromCookie();
+	$('#statuss').append('<br />Attempting to get board: [' + boardId + ']');
 	
 	var apiUri = 'http://localhost:9997/board/' + boardId;
 	
@@ -155,11 +161,11 @@ function retrieveBoardState()
 		.done(function(data) {
 			try
 			{
-				$('#statuss').append('<br />retrieved board: ' + data.Id);
+				$('#statuss').append('<br />Success! Retrieved board: [' + data.Id + ']');
 			}
 			catch(e)
 			{
-				$('#statuss').append('<br />failed to deserialize json board')
+				$('#statuss').append('<br />Failed to deserialize json board')
 			}
 		})
 		.fail(function() {
@@ -170,10 +176,66 @@ function retrieveBoardState()
 			//$('#statuss').append('<br /><p>API call completed as promised</p>');	
 			//$('#statuss').append('<br />API promise completed');		
 		})
+}
+
+function clearStatus()
+{
+	$('#statuss').html('');
+}
+
+function wireUpButtons()
+{
+	$('#refreshboard').click(function() {
+		retrieveBoardState();
+	});
+
+
+	$('#clearStatus').click(function() {
+		clearStatus();
+	});
+
+	$('#newBoard').click(function() {
+		clearBoardCookie();
+		clearStatus();
+		setBoardCookie();
+		retrieveBoardState();
+	});
+
+	$('#movePawn').click(function() {
+
+		var boardId = readBoardIdFromCookie();
+	
+		var apiUri = 'http://localhost:9997/move/' + boardId + '/1/Queen';
+		$('#statuss').append('<br />moving piece: ' + apiUri);
+
+		$.getJSON(apiUri)
+			.done(function(data) {
+				try
+				{
+					$('#statuss').append('<br />moved board: ' + data);
+				}
+				catch(e)
+				{
+					$('#statuss').append('<br />failed to deserialize json move')
+				}
+			})
+			.fail(function() {
+				$('#statuss').append('<br /><p>API call to ' + apiUri + ' failed</p>');
+
+			})
+			.always(function() {
+				//$('#statuss').append('<br /><p>API call completed as promised</p>');	
+				//$('#statuss').append('<br />API promise completed');		
+			})
+
+	});
+
 
 }
 
 $(document).ready(function() {
+	wireUpButtons();
+
 	setVersion();
 	setBoardInitial();
 
@@ -181,4 +243,5 @@ $(document).ready(function() {
 	setBoardCookie();
 
 	retrieveBoardState();
+
 });

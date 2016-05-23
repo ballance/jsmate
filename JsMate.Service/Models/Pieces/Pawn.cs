@@ -14,7 +14,7 @@ namespace JsMate.Service.Models
         {
         }
 
-        public string PieceType => typeof(Pawn).Name;
+        public override string PieceType => typeof(Pawn).Name;
 
         public new List<BoardPosition> GetValidMoves()
         {
@@ -24,14 +24,14 @@ namespace JsMate.Service.Models
             {
                 direction = -1;
             }
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow + direction));
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow + 2 * direction));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + direction));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + 2 * direction));
 
             // Take East (check for collision before allowing)
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + direction, BoardPosition.PositionRow + direction));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + direction, BoardPosition.Row + direction));
 
             // Take west (check for collision before allowing)
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + direction, BoardPosition.PositionRow + direction));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + direction, BoardPosition.Row + direction));
             
             return candidatePositions;
         }

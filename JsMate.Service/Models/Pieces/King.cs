@@ -7,38 +7,39 @@ namespace JsMate.Service.Models
     {
         public King()
         {
+            PieceNumber = 1;
         }
 
 
-        public string PieceType => typeof(King).Name;
+        public override string PieceType => typeof(King).Name;
 
         public new List<BoardPosition> GetValidMoves()
         {
             var candidatePositions = new List<BoardPosition>();
 
             // N
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol - 1, BoardPosition.PositionRow));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row));
 
             // NE
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol - 1, BoardPosition.PositionRow + 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row + 1));
 
             // E
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow + 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + 1));
 
             // SE
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + 1, BoardPosition.PositionRow + 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row + 1));
 
             // S
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + 1, BoardPosition.PositionRow));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row));
 
             // SW
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + 1, BoardPosition.PositionRow - 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row - 1));
 
             // W
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow - 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row - 1));
 
             // NW
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol - 1, BoardPosition.PositionRow - 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row - 1));
 
             return candidatePositions;
         }

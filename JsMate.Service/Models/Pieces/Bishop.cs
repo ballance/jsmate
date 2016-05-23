@@ -9,7 +9,7 @@ namespace JsMate.Service.Models
         {
         }
 
-        public string PieceType => typeof(Bishop).Name;
+        public override string PieceType => typeof(Bishop).Name;
 
         public new List<BoardPosition> GetValidMoves()
         {
@@ -18,16 +18,16 @@ namespace JsMate.Service.Models
             // TODO: Add how far the bishop can move
 
             // NE
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol - 1, BoardPosition.PositionRow + 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row + 1));
 
             // SE
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + 1, BoardPosition.PositionRow + 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row + 1));
 
             // SW
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + 1, BoardPosition.PositionRow - 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row - 1));
 
             // NW
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol - 1, BoardPosition.PositionRow - 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row - 1));
 
             return candidatePositions;
         }

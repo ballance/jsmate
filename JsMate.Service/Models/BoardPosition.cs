@@ -1,3 +1,5 @@
+using System;
+
 namespace JsMate.Service.Models
 {
     public class BoardPosition
@@ -11,12 +13,20 @@ namespace JsMate.Service.Models
             row.ValidateRowCol();
             col.ValidateRowCol();
 
-            PositionRow = row;
-            PositionCol = col;
+            Row = row;
+            Col = col;
         }
 
-        public int? PositionRow { get; set; }
+        public int? Row { get; set; }
 
-        public int? PositionCol { get; set; }
+        public int? Col { get; set; }
+
+        public void ValidateBoardBounds()
+        {
+            if ((Col >= 0 && Col <= 7) && (Row >= 0 && Row <= 7) == false)
+            {
+                throw new InvalidOperationException("Piece fell off the board.");
+            }
+        }
     }
 }

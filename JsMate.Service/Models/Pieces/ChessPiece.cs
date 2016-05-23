@@ -4,13 +4,28 @@ using System.ComponentModel;
 
 namespace JsMate.Service.Models
 {
-    public class ChessPiece //: IChessPiece
+    public interface IChessPiece
+    {
+        string PieceType { get; }
+        BoardPosition BoardPosition { get; set; }
+        bool Active { get; }
+        PieceTeam PieceTeam { get; set; }
+        List<BoardPosition> GetValidMoves();
+        void TakePiece();
+        bool CanMove(int? destinationRow, int? destinationCol);
+    }
+
+    public class ChessPiece : IChessPiece
     {
         public ChessPiece()
         {
             
         }
-        
+
+        public int PieceNumber { get; set; }
+
+        public virtual string PieceType { get; }
+
         public List<BoardPosition> GetValidMoves()
         {
             throw new NotImplementedException();
@@ -39,8 +54,8 @@ namespace JsMate.Service.Models
 
         public void TakePiece()
         {
-            BoardPosition.PositionCol = null;
-            BoardPosition.PositionRow = null;
+            BoardPosition.Col = null;
+            BoardPosition.Row = null;
             _active = false;
         }
 

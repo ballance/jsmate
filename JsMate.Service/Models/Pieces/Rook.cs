@@ -9,23 +9,23 @@ namespace JsMate.Service.Models
         {
         }
 
-        public string PieceType => typeof(Rook).Name;
+        public override string PieceType => typeof(Rook).Name;
         
         public new List<BoardPosition> GetValidMoves()
         {
             var candidatePositions = new List<BoardPosition>();
 
             // N
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol - 1, BoardPosition.PositionRow));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col - 1, BoardPosition.Row));
         
             // E
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow + 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + 1));
         
             // S
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol + 1, BoardPosition.PositionRow));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + 1, BoardPosition.Row));
 
             // W
-            candidatePositions.Add(new BoardPosition(BoardPosition.PositionCol, BoardPosition.PositionRow - 1));
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row - 1));
 
             return candidatePositions;
         }

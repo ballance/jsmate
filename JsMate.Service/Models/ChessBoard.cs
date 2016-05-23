@@ -7,7 +7,7 @@ namespace JsMate.Service.Models
 {
     public interface IChessBoard
     {
-        List<ChessPiece> Pieces { get; set; }
+        List<IChessPiece> Pieces { get; set; }
     }
 
     public class ChessBoard : IChessBoard
@@ -16,9 +16,9 @@ namespace JsMate.Service.Models
         private bool _instantiated = false;
 
         public string Id { get; set; }
-        public List<ChessPiece> Pieces { get; set; }
+        public List<IChessPiece> Pieces { get; set; }
 
-        public ChessBoard(string id)
+        public ChessBoard(string id, bool canCreateNew = true)
         {
             var boardGuid = Convert.ToString(id);
             using (var db = new LiteDatabase(@"ChessData.db"))
@@ -40,13 +40,18 @@ namespace JsMate.Service.Models
                     Console.WriteLine($"Failed to retrieve existing board [{boardGuid}]");
                 }
             }
-
+            
             if (_instantiated) return;
+
+            if (!canCreateNew)
+            {
+                throw new ApplicationException("Board not found.  Moves can only be applied to existing boards.");
+            }
 
             try
             {
                 // If not already create set up initial chessboard state
-                if (Pieces == null) { Pieces = new List<ChessPiece>();}
+                if (Pieces == null) { Pieces = new List<IChessPiece>();}
 
                 Pieces.AddRange(SetInitialBoardState());
                 Id = id;
@@ -130,13 +135,6 @@ namespace JsMate.Service.Models
             return initialPieces;
         }
 
-        //public ChessBoard(List<ChessPiece> pieces, string id)
-        //{
-        //    Id = id;
-        //    // TODO: Add validation
-        //    _pieces.AddRange(pieces);
-        //}
-
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -153,6 +151,37 @@ namespace JsMate.Service.Models
             // TODO: Find a cleaner way to make this comparison.  Goal is to ensure the same pieces are in the same places on both boards.
             return Pieces.All(piece => chessBoard.Pieces.Contains(piece)) &&
                    chessBoard.Pieces.All(piece2 => Pieces.Contains(piece2));
+        }
+
+        public bool Update(ChessBoard cb)
+        {
+            using (var db = new LiteDatabase(@"ChessData.db"))
+            {
+                try
+                {
+                    var boards = db.GetCollection<ChessBoard>("chessBoards");
+                    return boards.Update(cb);
+                   
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"Failed to update existing board [{cb.Id}]");
+                    return false;
+                }
+            }
+        }
+
+        public void ValidateFriendlyFire()
+        {
+            var result = Pieces.GroupBy(x => new { x.BoardPosition.Col,  x.BoardPosition.Row })
+                .Where(g => g.Count() > 1)
+                .Select(f => f.Key)
+                .ToList();
+
+            if (result.Any())
+            {
+                throw new InvalidOperationException("Friendly Fire!  Move not allowed!");
+            }
         }
     }
 }
