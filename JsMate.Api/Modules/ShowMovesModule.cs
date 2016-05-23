@@ -42,8 +42,11 @@ namespace JsMate.Api
                     
                     Console.WriteLine($"Enumerating moves for [{boardId}]");
 
-                    var candidateMoves = pieceToEnumerateMovesFor.GetValidMoves();
-                    return JsonConvert.SerializeObject(candidateMoves);
+                    var candidateMoves = pieceToEnumerateMovesFor.GetValidMoves(foundBoard);
+
+                    var collisionsRemoved = foundBoard.RemoveCollisions(candidateMoves);
+
+                    return JsonConvert.SerializeObject(collisionsRemoved);
                 }
                 catch (Exception ex)
                 {

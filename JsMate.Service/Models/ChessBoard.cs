@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using JsMate.Service.Models.Pieces;
 using LiteDB;
 
@@ -183,6 +184,19 @@ namespace JsMate.Service.Models
             {
                 throw new InvalidOperationException("Collision!  Move not allowed!");
             }
+        }
+
+        public List<BoardPosition> RemoveCollisions(List<BoardPosition> candidateMoves)
+        {
+            var collisionsRemoved = new List<BoardPosition>();
+            foreach (var candidateMove in candidateMoves)
+            {
+                // TODO: I know the axes here are reversed in this comparison, but it works.  Will revisit and fix.
+                if (candidateMove.AttackPosition ||
+                    Pieces.Any(x => x.BoardPosition.Col.Equals(candidateMove.Row) && x.BoardPosition.Row.Equals(candidateMove.Col)) == false)
+                { collisionsRemoved.Add(candidateMove);}
+            }
+            return collisionsRemoved;
         }
     }
 }

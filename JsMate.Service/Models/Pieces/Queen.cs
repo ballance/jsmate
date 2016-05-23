@@ -11,58 +11,67 @@ namespace JsMate.Service.Models.Pieces
 
         public override string PieceType => typeof(Queen).Name;
 
-        public override List<BoardPosition> GetValidMoves()
+        public override List<BoardPosition> GetValidMoves(ChessBoard board)
         {
             var candidatePositions = new CandidatePositions();
 
             // TODO: Add how far the queen can move
 
+            var moveDepth = 15;
             // N
-            for (int n = 1; n < 7; n++)
+            for (int n = 1; n < moveDepth; n++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col - n, BoardPosition.Row));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col - n, BoardPosition.Row), board) == false)
+                    break;
             }
 
             // NE
-            for (int ne = 1; ne < 7; ne++)
+            for (int ne = 1; ne < moveDepth; ne++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col - ne, BoardPosition.Row + ne));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col - ne, BoardPosition.Row + ne), board) == false)
+                    break;
             }
 
             // E
-            for (int e = 1; e < 7; e++)
+            for (int e = 1; e < moveDepth; e++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + e));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + e), board) == false)
+                    break;
             }
 
             // SE
-            for (int se = 1; se < 7; se++)
+            for (int se = 1; se < moveDepth; se++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col + se, BoardPosition.Row + se));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col + se, BoardPosition.Row + se), board) == false)
+                    break;
             }
 
             // S
-            for (int s = 1; s < 7; s++)
+            for (int s = 1; s < moveDepth; s++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col + s, BoardPosition.Row));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col + s, BoardPosition.Row), board) == false)
+                    break;
             }
 
             // SW
-            for (int sw = 1; sw < 7; sw++)
+            for (int sw = 1; sw < moveDepth; sw++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col + sw, BoardPosition.Row - sw));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col + sw, BoardPosition.Row - sw), board) == false)
+                    break;
             }
 
             // W
-            for (int w = 1; w < 7; w++)
+            for (int w = 1; w < moveDepth; w++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row - w));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row - w), board) == false)
+                    break;
             }
 
             // NW
-            for (int nw = 1; nw < 7; nw++)
+            for (int nw = 1; nw < moveDepth; nw++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col - nw, BoardPosition.Row - nw));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col - nw, BoardPosition.Row - nw), board) == false)
+                    break;
             }
 
             return candidatePositions.BoardPositions;

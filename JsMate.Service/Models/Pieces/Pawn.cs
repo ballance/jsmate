@@ -15,7 +15,7 @@ namespace JsMate.Service.Models.Pieces
 
         public override string PieceType => typeof(Pawn).Name;
 
-        public override List<BoardPosition> GetValidMoves()
+        public override List<BoardPosition> GetValidMoves(ChessBoard board)
         {
             var candidatePositions = new CandidatePositions();
             var direction = 1;
@@ -23,14 +23,19 @@ namespace JsMate.Service.Models.Pieces
             {
                 direction = -1;
             }
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + direction));
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + 2 * direction));
+
+            // TODO: This is loop is dangerous and inconvenient, but I do love Fig Newtons.
+            for (var i = 1; i <= 2; i++)
+            {
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col, BoardPosition.Row + direction*i), board) == false)
+                    break;
+            }
 
             // Take East (check for collision before allowing)
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col + direction, BoardPosition.Row + direction) { AttackPosition = true});
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + direction, BoardPosition.Row + direction) { AttackPosition = true}, board);
 
             // Take west (check for collision before allowing)
-            candidatePositions.Add(new BoardPosition(BoardPosition.Col + -1*direction, BoardPosition.Row + direction) { AttackPosition = true });
+            candidatePositions.Add(new BoardPosition(BoardPosition.Col + -1*direction, BoardPosition.Row + direction) { AttackPosition = true }, board);
             
             return candidatePositions.BoardPositions;
         }

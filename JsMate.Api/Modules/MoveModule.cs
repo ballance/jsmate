@@ -30,26 +30,28 @@ namespace JsMate.Api
                     ChessBoard foundBoard = FindBoard(boardId);
 
                     // TODO: Clean up these messy conversions
-                    var pieceToMove =
-                        foundBoard.Pieces.Single(
+                    var piecesToMove =
+                        foundBoard.Pieces.Where(
                             x => x.PieceType.Equals(piece) 
                                 && x.PieceTeam.Equals(team == "0" ? PieceTeam.Black : PieceTeam.White)
-                                && x.PieceNumber.Equals(pieceNumber));
+                                //&& x.PieceNumber.Equals(pieceNumber)
+                                );
 
-
-                    // TODO: Ick, but it shows both white & black pieces moving forward
-                    if (pieceToMove.PieceTeam.Equals(PieceTeam.Black))
-                        pieceToMove.BoardPosition.Row++;
-                    else
+                    foreach (var pieceToMove in piecesToMove)
                     {
-                        pieceToMove.BoardPosition.Row--;
+                        // TODO: Ick, but it shows both white & black pieces moving forward
+                        if (pieceToMove.PieceTeam.Equals(PieceTeam.Black))
+                            pieceToMove.BoardPosition.Row++;
+                        else
+                        {
+                            pieceToMove.BoardPosition.Row--;
+                        }
+
+                        foundBoard.ValidateCollision();
+                        pieceToMove.BoardPosition.ValidateBoardBounds();
+
+                        foundBoard.Update(foundBoard);
                     }
-
-                    foundBoard.ValidateCollision();
-                    pieceToMove.BoardPosition.ValidateBoardBounds();
-                    
-                    foundBoard.Update(foundBoard);
-
                     Console.WriteLine($"Completed move for [{boardId}]");
                     return JsonConvert.SerializeObject(true);
                 }

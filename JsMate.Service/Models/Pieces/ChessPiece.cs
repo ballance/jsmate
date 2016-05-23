@@ -9,7 +9,7 @@ namespace JsMate.Service.Models.Pieces
         BoardPosition BoardPosition { get; set; }
         bool Active { get; }
         PieceTeam PieceTeam { get; set; }
-        List<BoardPosition> GetValidMoves();
+        List<BoardPosition> GetValidMoves(ChessBoard board);
         void TakePiece();
         bool CanMove(int? destinationRow, int? destinationCol);
         int PieceNumber { get; set; }
@@ -26,7 +26,7 @@ namespace JsMate.Service.Models.Pieces
 
         public virtual string PieceType { get; }
 
-        public virtual List<BoardPosition> GetValidMoves()
+        public virtual List<BoardPosition> GetValidMoves(ChessBoard board)
         {
             throw new NotImplementedException();
         }

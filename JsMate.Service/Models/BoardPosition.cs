@@ -7,17 +7,15 @@ namespace JsMate.Service.Models
         public BoardPosition()
         {
             // Default ctor added to make litedb happy
+            AttackPosition = false;
         }
         public BoardPosition(int? row, int? col)
         {
-            //row.ValidateRowCol();
-            //col.ValidateRowCol();
-
             Row = row;
             Col = col;
         }
 
-        public bool AttackPosition = false;
+        public bool AttackPosition { get; set; }
 
         public int? Row { get; set; }
 

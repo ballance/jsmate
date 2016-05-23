@@ -49,8 +49,8 @@ jQuery.fn.extend({
   
 
  const RookHtml = { White:'&#9814;', Black:'&#9820;'};
- const KnightHtml = { White:'&#9816;', Black:'&#9821;'};
- const BishopHtml = { White:'&#9815', Black:'&#9822;'};
+ const KnightHtml = { White:'&#9816;', Black:'&#9822;'};
+ const BishopHtml = { White:'&#9815', Black:'&#9821;'};
  const QueenHtml = { White:'&#9813', Black:'&#9819;'};
  const KingHtml = { White:'&#9812;', Black:'&#9818;'};
  const PawnHtml = { White:'&#9817;', Black:'&#9823;'};
@@ -277,6 +277,41 @@ function writeStatus(statusMessage)
 	$('#statuss').append('<br />' + statusMessage);
 }
 
+
+function moveAllPawnsForward(boardId)
+{
+	for (var team = 0; team < 2; team++) {
+		for (var i = 1; i <=8; i++) {
+			var apiUri = 'http://localhost:9997/move/' + boardId + '/' + team + '/Pawn/' + i;
+			writeStatus('moving piece: ' + apiUri);
+
+			$.getJSON(apiUri)
+				.done(function(data) {
+					try
+					{
+						writeStatus('moved board: ' + data);
+					}
+					catch(e)
+					{
+						writeStatus('failed to deserialize json move')
+					}
+				})
+				.fail(function() {
+					writeStatus('<p>API call to ' + apiUri + ' failed</p>');
+
+				})
+				.always(function() {
+					//clearBoardHighlights();
+					//retrieveBoardState();
+				})
+			function foobar(el) { setTimeout(function() { foobar_cont(el); }, 500); }
+		}
+		function foobar(el) { setTimeout(function() { foobar_cont(el); }, 500); }
+	}
+	clearBoardHighlights();
+	retrieveBoardState();
+}
+
 function wireUpButtons()
 {
 	$('#refreshboard').click(function() {
@@ -297,7 +332,7 @@ function wireUpButtons()
 		retrieveBoardState();
 	});
 
-	$('#moveBlackPawn2').click(function() {
+	$('#moveBlackPawns').click(function() {
 		var boardId = readBoardIdFromCookie();
 	
 		var apiUri = 'http://localhost:9997/move/' + boardId + '/0/Pawn/2';
@@ -324,7 +359,7 @@ function wireUpButtons()
 			})
 	});
 
-	$('#moveWhitePawn2').click(function() {
+	$('#moveWhitePawns').click(function() {
 		var boardId = readBoardIdFromCookie();
 
 		var apiUri = 'http://localhost:9997/move/' + boardId + '/1/Pawn/2';
@@ -350,6 +385,7 @@ function wireUpButtons()
 				retrieveBoardState();
 			})
 	});
+	
 
 	$('#showMoves').click(function() {
 		showMoves();

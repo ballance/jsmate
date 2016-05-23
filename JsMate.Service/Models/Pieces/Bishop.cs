@@ -10,36 +10,41 @@ namespace JsMate.Service.Models.Pieces
 
         public override string PieceType => typeof(Bishop).Name;
 
-        public override List<BoardPosition> GetValidMoves()
+        public override List<BoardPosition> GetValidMoves(ChessBoard board)
         {
-            var candidatePositions = new List<BoardPosition>();
+            var candidatePositions = new CandidatePositions();
 
             // TODO: Add how far the bishop can move
 
             // NE
-            for (int ne = 1; ne < 7; ne++)
+            for (var ne = 1; ne < 7; ne++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col - ne, BoardPosition.Row + ne));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col - ne, BoardPosition.Row + ne), board) == false)
+                    break;
             }
 
             // SE
-            for (int se = 1; se < 7; se++)
+            for (var se = 1; se < 7; se++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col + se, BoardPosition.Row + se));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col + se, BoardPosition.Row + se), board) == false)
+                    break;
             }
 
             // SW
-            for (int sw = 1; sw < 7; sw++)
+            for (var sw = 1; sw < 7; sw++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col + sw, BoardPosition.Row - sw));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col + sw, BoardPosition.Row - sw), board) == false)
+                    break;
             }
 
             // NW
-            for (int nw = 1; nw < 7; nw++)
+            for (var nw = 1; nw < 7; nw++)
             {
-                candidatePositions.Add(new BoardPosition(BoardPosition.Col - nw, BoardPosition.Row - nw));
+                if (candidatePositions.Add(new BoardPosition(BoardPosition.Col - nw, BoardPosition.Row - nw), board) ==
+                    false)
+                    break;
             }
-            return candidatePositions;
+            return candidatePositions.BoardPositions;
         }
     }
 }
