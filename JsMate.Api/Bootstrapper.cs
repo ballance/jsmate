@@ -8,11 +8,6 @@ namespace JsMate.Api
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {
-        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
-            base.ConfigureApplicationContainer(container);
-        }
-
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
         {
             base.RequestStartup(container, pipelines, context);

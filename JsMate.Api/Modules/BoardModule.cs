@@ -18,10 +18,6 @@ namespace JsMate.Api
                 var boardId = Guid.NewGuid().ToString();
 
                 return FindOrCreateBoard(boardId);
-                //IChessBoard cb = new ChessBoard(Guid.NewGuid().ToString());
-
-                //var ser = JsonConvert.SerializeObject(cb);
-                //return ser;
             };
 
             // Attempt to load existing board, create new if none found
@@ -41,8 +37,7 @@ namespace JsMate.Api
                 IChessBoard cb = new ChessBoard(boardId);
 
                 var ser = JsonConvert.SerializeObject(cb);
-
-                //Console.WriteLine($"Returning {ser}");
+                
                 Console.WriteLine($"Found or created board [{boardId}]");
 
                 return ser;

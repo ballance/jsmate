@@ -15,8 +15,6 @@ namespace JsMate.Service.Test
         public void ShouldCreateDefaultChessBoard()
         {
             var startingBoard = new ChessBoard();
-
-
         }
     }
 }

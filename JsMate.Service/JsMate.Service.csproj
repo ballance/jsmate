@@ -56,7 +56,6 @@
     <Compile Include="Models\BoardPosition.cs" />
     <Compile Include="Models\ChessBoard.cs" />
     <Compile Include="Models\ChessSquare.cs" />
-    <Compile Include="Models\IChessBoard.cs" />
     <Compile Include="Models\IChessPiece.cs" />
     <Compile Include="Models\Pieces\Bishop.cs" />
     <Compile Include="Models\Pieces\CandidatePositions.cs" />

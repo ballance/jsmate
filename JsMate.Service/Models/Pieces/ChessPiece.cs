@@ -37,19 +37,12 @@ namespace JsMate.Service.Models.Pieces
 
         public bool Active => _active;
 
-        //public PieceType PieceType
-        //{
-        //    get { return _pieceType; }
-        //    set { _pieceType = value; }
-        //}
-
         public PieceTeam PieceTeam
         {
             get { return _pieceTeam; }
             set { _pieceTeam = value; }
         }
 
-        //private PieceType _pieceType;
         private PieceTeam _pieceTeam;
 
         public void TakePiece()
