@@ -15,9 +15,11 @@ jsMate is a web-based chess application built initially over a [time-boxed weeke
 | Node.js            | [Installer](https://nodejs.org/en/download/) |
 | connect            | `npm install connect` |
 | serve-static       | `npm install serve-static` |
+| cors               | `npm install cors` |
 | Nancy              | `Install-Package Nancy` |
 | Nancy.Hosting.Self | `Install-Package Nancy.Hosting.Self ` |
 | LiteDB             | `Install-Package LiteDB`  |
+
 
 #### Getting started from zero
 
