@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using LiteDB;
 
 namespace JsMate.Service.Models
@@ -18,14 +15,8 @@ namespace JsMate.Service.Models
         // TODO: Consider removing this flag
         private bool _instantiated = false;
 
-        private List<ChessPiece> _pieces = new List<ChessPiece>();
-
-        public string Id { get; private set; }
-        public List<ChessPiece> Pieces
-        {
-            get { return _pieces; }
-            set { _pieces = value; }
-        }
+        public string Id { get; set; }
+        public List<ChessPiece> Pieces { get; set; }
 
         public ChessBoard(string id)
         {
@@ -39,7 +30,7 @@ namespace JsMate.Service.Models
                     if (foundBoardCollection.Any())
                     {
                         var foundBoard = foundBoardCollection.Single();
-                        _pieces = foundBoard.Pieces;
+                        Pieces = foundBoard.Pieces;
                         Id = foundBoard.Id;
                         _instantiated = true;
                     }
@@ -55,15 +46,17 @@ namespace JsMate.Service.Models
             try
             {
                 // If not already create set up initial chessboard state
-                _pieces.AddRange(SetInitialBoardState());
+                if (Pieces == null) { Pieces = new List<ChessPiece>();}
+
+                Pieces.AddRange(SetInitialBoardState());
                 Id = id;
                 using (var db = new LiteDatabase(@"ChessData.db"))
                 {
                     var boards = db.GetCollection<ChessBoard>("chessBoards");
+                    _instantiated = true;
                     boards.Insert(this);
                     boards.EnsureIndex(x => x.Id);
                 }
-                _instantiated = true;
             }
             catch (Exception ex)
             {
@@ -78,12 +71,12 @@ namespace JsMate.Service.Models
         #region Comparison overrides
         protected bool Equals(ChessBoard other)
         {
-            return Equals(_pieces, other.Pieces);
+            return Equals(Pieces, other.Pieces);
         }
 
         public override int GetHashCode()
         {
-            return (_pieces != null ? _pieces.GetHashCode() : 0);
+            return (Pieces != null ? Pieces.GetHashCode() : 0);
         }
         #endregion
 
@@ -137,13 +130,12 @@ namespace JsMate.Service.Models
             return initialPieces;
         }
 
-        public ChessBoard(List<ChessPiece> pieces, string id)
-        {
-            Id = id;
-            // TODO: Add validation
-            _pieces.AddRange(pieces);
-        }
-
+        //public ChessBoard(List<ChessPiece> pieces, string id)
+        //{
+        //    Id = id;
+        //    // TODO: Add validation
+        //    _pieces.AddRange(pieces);
+        //}
 
         public override bool Equals(object obj)
         {
@@ -159,11 +151,8 @@ namespace JsMate.Service.Models
             }
 
             // TODO: Find a cleaner way to make this comparison.  Goal is to ensure the same pieces are in the same places on both boards.
-            return _pieces.All(piece => chessBoard.Pieces.Contains(piece)) &&
-                   chessBoard.Pieces.All(piece2 => _pieces.Contains(piece2));
-
+            return Pieces.All(piece => chessBoard.Pieces.Contains(piece)) &&
+                   chessBoard.Pieces.All(piece2 => Pieces.Contains(piece2));
         }
-
-
     }
 }
