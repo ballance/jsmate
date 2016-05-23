@@ -70,7 +70,6 @@
     <Compile Include="Modules\MoveModule.cs" />
     <Compile Include="Modules\BoardModule.cs" />
     <Compile Include="CustomJsonSerializer.cs" />
-    <Compile Include="Modules\HelloModule.cs" />
     <Compile Include="Modules\IndexModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
