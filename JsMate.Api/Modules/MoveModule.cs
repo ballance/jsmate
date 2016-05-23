@@ -35,9 +35,15 @@ namespace JsMate.Api
                             x => x.PieceType.Equals(piece) 
                                 && x.PieceTeam.Equals(team == "0" ? PieceTeam.Black : PieceTeam.White)
                                 && x.PieceNumber.Equals(pieceNumber));
-                    
-                    pieceToMove.BoardPosition.Row++;
 
+
+                    // TODO: Ick, but it shows both white & black pieces moving forward
+                    if (pieceToMove.PieceTeam.Equals(PieceTeam.Black))
+                        pieceToMove.BoardPosition.Row++;
+                    else
+                    {
+                        pieceToMove.BoardPosition.Row--;
+                    }
 
                     foundBoard.ValidateCollision();
                     pieceToMove.BoardPosition.ValidateBoardBounds();
