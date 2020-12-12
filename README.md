@@ -27,8 +27,11 @@ jsMate is a web-based chess application built initially over a [time-boxed weeke
 ~~~~~~~~~~~~~~~~~~~
 git clone https://github.com/ballance/jsmate.git
 cd jsmate
+npm install cors --save
 npm install connect
 npm install serve-static
+npm i
+
 start.bat or start.ps1
 ~~~~~~~~~~~~~~~~~
 
