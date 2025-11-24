@@ -137,3 +137,10 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   background-color: #777;
   border-color: #666;
 }
+
+#status {
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.4;
+}

@@ -1,0 +1,6 @@
+@JsMate.Api_HostAddress = http://localhost:5096
+
+GET {{JsMate.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,402 +1,402 @@
-const fadeInterval = 150;
+// JsMate Chess Frontend - Modernized for 2025
+// Works with the new ASP.NET Core Minimal API
 
-function setVersion() {
-	try	{
-		var ver = JSON.parse(readVersion('version.json')).version;
-		var versionLabel = document.getElementById("versionLabel");
-		versionLabel.innerHTML = ver;
-	}
-	catch (e)
-	{
-		writeStatus(e);
-	}
+const API_BASE_URL = 'http://localhost:5096/api';
+const FADE_INTERVAL = 150;
+
+// Chess piece Unicode characters
+const PieceSymbols = {
+    Rook:   { White: '\u2656', Black: '\u265C' },
+    Knight: { White: '\u2658', Black: '\u265E' },
+    Bishop: { White: '\u2657', Black: '\u265D' },
+    Queen:  { White: '\u2655', Black: '\u265B' },
+    King:   { White: '\u2654', Black: '\u265A' },
+    Pawn:   { White: '\u2659', Black: '\u265F' }
+};
+
+// State
+let selectedSquare = null;
+let currentBoardId = null;
+let validMoves = [];
+
+// Utility Functions
+function createGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
-function readVersion(file)
-{
-	var versionRawFound = '';
-    var versionRaw = new XMLHttpRequest();
-    versionRaw.open("GET", file, false);
-    versionRaw.onreadystatechange = function ()
-    {
-        if(versionRaw.readyState === 4)
-        {
-            if(versionRaw.status === 200 || versionRaw.status == 0)
-            {
-                versionRawFound = versionRaw.responseText;
+function getBoardIdFromCookie() {
+    const match = document.cookie.match(/boardId=([^;]+)/);
+    return match ? match[1] : null;
+}
+
+function setBoardIdCookie(boardId) {
+    document.cookie = `boardId=${boardId}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+}
+
+function clearBoardIdCookie() {
+    document.cookie = 'boardId=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+}
+
+// Status logging
+function writeStatus(message) {
+    const statusElement = document.getElementById('status');
+    if (statusElement) {
+        const timestamp = new Date().toLocaleTimeString();
+        statusElement.innerHTML += `<br/>[${timestamp}] ${message}`;
+        statusElement.scrollTop = statusElement.scrollHeight;
+    }
+    console.log(message);
+}
+
+function clearStatus() {
+    const statusElement = document.getElementById('status');
+    if (statusElement) {
+        statusElement.innerHTML = '';
+    }
+}
+
+// Board rendering
+function clearBoard() {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const square = document.querySelector(`.block.row${row}.col${col}`);
+            if (square) {
+                square.innerHTML = '';
+                square.onclick = null;
             }
         }
     }
-    versionRaw.send(null);
-
-    return versionRawFound;
 }
 
-function createGuid()
-{
-	var guid = 'zzzzzzzz-zzzz-4zzz-tzzz-zzzzzzzzzzzz'.replace(/[zt]/g, function(c) {
-    	var r = Math.random()*16|0, v = c == 'z' ? r : (r&0x3|0x8);
-    	return v.toString(16);
-	});
-	return guid;
+function clearBoardHighlights() {
+    document.querySelectorAll('.block').forEach(square => {
+        square.classList.remove('highlight', 'possibleMove', 'possibleAttack');
+    });
 }
 
-// Extend jQuery to provide flash UX on pieces
-jQuery.fn.extend({
-  flashClick: function() {
-    return this.fadeIn(fadeInterval).fadeOut(fadeInterval).fadeIn(fadeInterval);
-    }});
-  
-
- const RookHtml = { White:'&#9814;', Black:'&#9820;'};
- const KnightHtml = { White:'&#9816;', Black:'&#9822;'};
- const BishopHtml = { White:'&#9815', Black:'&#9821;'};
- const QueenHtml = { White:'&#9813', Black:'&#9819;'};
- const KingHtml = { White:'&#9812;', Black:'&#9818;'};
- const PawnHtml = { White:'&#9817;', Black:'&#9823;'};
- 
-function setBoardInitial()
-{
-	/*
-	// King
-	var blackKing = $(".block.row1.col5");
-	blackKing.html('&#9818;');
-	blackKing.click(function() { writeStatus('clicked black king'); blackKing.flashClick();});
-	
-	// Queen
-	var blackQueen = $(".block.row1.col4");
-	blackQueen.html('&#9819;');
-	blackQueen.click(function() { writeStatus('clicked black queen'); blackQueen.flashClick();});
-	
-	// Pawns
-	$(".block.row2.block").html('&#9823;');
-	$(".block.row2.block").click(function() { 
-		writeStatus('clicked a black pawn');
-	});
-	*/
+function getPieceSymbol(pieceType, team) {
+    const symbols = PieceSymbols[pieceType];
+    if (!symbols) return '\u2639'; // Sad face for unknown
+    return symbols[team] || symbols.White;
 }
 
-function setBoardCookie() {
-	if (document.cookie.replace(/(?:(?:^|.*;\s*)instanceCookie\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
-    	var newGuid = createGuid();
-    	document.cookie = "instanceCookie=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-		document.cookie = "boardId=" + newGuid + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-	}
+function renderBoard(boardData) {
+    clearBoard();
+    clearBoardHighlights();
+
+    const pieces = boardData.Pieces || boardData.pieces || [];
+
+    pieces.forEach(piece => {
+        // Handle both old format and new API format (lowercase)
+        const row = piece.row ?? piece.Row ?? piece.BoardPosition?.Row;
+        const col = piece.col ?? piece.Col ?? piece.BoardPosition?.Col;
+        const pieceType = piece.pieceType ?? piece.PieceType;
+        const team = piece.pieceTeam ?? piece.PieceTeam;
+        const isActive = piece.active ?? piece.Active ?? piece.IsActive ?? true;
+
+        if (row === undefined || col === undefined) return;
+        if (!isActive) return; // Skip captured pieces
+
+        const square = document.querySelector(`.block.row${row}.col${col}`);
+        if (!square) return;
+
+        // Set piece symbol
+        const symbol = getPieceSymbol(pieceType, team);
+        square.innerHTML = symbol;
+
+        // Set click handler for pieces
+        square.onclick = (e) => {
+            e.preventDefault();
+            handleSquareClick(row, col, true);
+        };
+    });
+
+    // Set click handlers for empty squares (for moves)
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const square = document.querySelector(`.block.row${row}.col${col}`);
+            if (square && !square.innerHTML) {
+                square.onclick = (e) => {
+                    e.preventDefault();
+                    handleSquareClick(row, col, false);
+                };
+            }
+        }
+    }
+
+    // Update turn indicator if present
+    const turnIndicator = document.getElementById('turnIndicator');
+    if (turnIndicator) {
+        const currentTurn = boardData.CurrentTurn || boardData.currentTurn || 'White';
+        turnIndicator.textContent = `${currentTurn}'s turn`;
+    }
 }
 
-function clearBoardCookie() {
-	document.cookie = "instanceCookie=; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-	document.cookie = "boardId=; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+// Click handling
+async function handleSquareClick(row, col, hasPiece) {
+    const clickedSquare = { row, col };
+
+    // If we have a selected piece and clicked on a valid move
+    if (selectedSquare && isValidMove(row, col)) {
+        await executeMove(selectedSquare.row, selectedSquare.col, row, col);
+        selectedSquare = null;
+        validMoves = [];
+        return;
+    }
+
+    // If clicking on a piece, select it and show moves
+    if (hasPiece) {
+        clearBoardHighlights();
+        selectedSquare = clickedSquare;
+
+        const square = document.querySelector(`.block.row${row}.col${col}`);
+        if (square) {
+            square.classList.add('highlight');
+        }
+
+        await showValidMoves(row, col);
+    } else {
+        // Clicking on empty square without valid move - deselect
+        clearBoardHighlights();
+        selectedSquare = null;
+        validMoves = [];
+    }
 }
 
-function readBoardIdFromCookie() {
-	var currentBoardId = document.cookie.replace(/(?:(?:^|.*;\s*)boardId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-	return currentBoardId;
+function isValidMove(row, col) {
+    return validMoves.some(move => {
+        const moveRow = move.row ?? move.Row;
+        const moveCol = move.col ?? move.Col;
+        return moveRow === row && moveCol === col;
+    });
 }
 
-function clearBoard() {
-	for (var i = 0; i < 8; i++) {
-		for (var j = 0; j < 8; j++)	{
-			var selectorForClear = '.block.row' + i + '.col' + j;
-			$(selectorForClear).html('');
-			$(selectorForClear).unbind('click');
-		}
-	}
+// API calls
+async function fetchBoard(boardId) {
+    try {
+        writeStatus(`Fetching board: ${boardId}`);
+        const response = await fetch(`${API_BASE_URL}/board/${boardId}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        writeStatus(`Board loaded successfully`);
+        currentBoardId = data.Id || data.id || boardId;
+        return data;
+    } catch (error) {
+        writeStatus(`Error fetching board: ${error.message}`);
+        throw error;
+    }
 }
 
-function clearBoardHighlights()
-{
-	for (var i = 0; i < 8; i++) {
-		for (var j = 0; j < 8; j++)	{
-			var selectorForClear = '.block.row' + i + '.col' + j;
-			
-			$(selectorForClear).removeClass('highlight');
-			$(selectorForClear).removeClass('possibleMove');
-			$(selectorForClear).removeClass('possibleAttack');
-		}
-	}	
+async function showValidMoves(row, col) {
+    if (!currentBoardId) return;
+
+    try {
+        writeStatus(`Getting moves for piece at (${row}, ${col})`);
+        const response = await fetch(`${API_BASE_URL}/board/${currentBoardId}/moves/${row}/${col}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const moves = await response.json();
+        validMoves = moves;
+
+        writeStatus(`Found ${moves.length} valid moves`);
+
+        moves.forEach(move => {
+            const targetRow = move.Row ?? move.row;
+            const targetCol = move.Col ?? move.col;
+            const square = document.querySelector(`.block.row${targetRow}.col${targetCol}`);
+
+            if (square) {
+                // Check if square has a piece (for attack highlighting)
+                if (square.innerHTML) {
+                    square.classList.add('possibleAttack');
+                } else {
+                    square.classList.add('possibleMove');
+                }
+
+                // Make valid move squares clickable
+                const originalOnClick = square.onclick;
+                square.onclick = (e) => {
+                    e.preventDefault();
+                    handleSquareClick(targetRow, targetCol, !!square.innerHTML);
+                };
+            }
+        });
+    } catch (error) {
+        writeStatus(`Error getting moves: ${error.message}`);
+        validMoves = [];
+    }
 }
 
-function setBoardClickHandlers() {
-	for (var i = 0; i < 8; i++) {
-		for (var j = 0; j < 8; j++)	{
-			var selectorForBlankHandler = '.block.row' + i + '.col' + j;
-			
-			$(selectorForBlankHandler).click(function () {
-				selected = this.className;
-				writeStatus('selected blank square' + selected);
-			})
+async function executeMove(fromRow, fromCol, toRow, toCol) {
+    if (!currentBoardId) return;
 
-		}
-	}
+    try {
+        writeStatus(`Moving piece from (${fromRow}, ${fromCol}) to (${toRow}, ${toCol})`);
+
+        const response = await fetch(`${API_BASE_URL}/board/${currentBoardId}/move`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fromRow: fromRow,
+                fromCol: fromCol,
+                toRow: toRow,
+                toCol: toCol
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.Success || result.success) {
+            writeStatus('Move executed successfully');
+            await refreshBoard();
+        } else {
+            writeStatus(`Move failed: ${result.Message || result.message || 'Unknown error'}`);
+        }
+    } catch (error) {
+        writeStatus(`Error executing move: ${error.message}`);
+    }
 }
 
-function determinePieceHtml(piece) {
-	var pieceHtml = '&#9785;' // Default to sad face if not found
-	switch(piece.PieceType) {
-		case "Queen":
-			pieceHtml = QueenHtml;
-			break;
-		case "King":
-			pieceHtml = KingHtml;
-			break;
-		case "Bishop":
-			pieceHtml = BishopHtml;
-			break;
-		case "Knight":
-			pieceHtml = KnightHtml;
-			break;
-		case "Rook":
-			pieceHtml = RookHtml;
-			break;
-		case "Pawn":
-			pieceHtml = PawnHtml;
-			break;
-	}
+async function refreshBoard() {
+    if (!currentBoardId) {
+        currentBoardId = getBoardIdFromCookie();
+    }
 
-	if (piece.PieceTeam == '0') {
-		pieceHtml = pieceHtml.Black;
-	}
-	else {
-		pieceHtml = pieceHtml.White;
-	}
-	return pieceHtml;
+    if (!currentBoardId) {
+        currentBoardId = createGuid();
+        setBoardIdCookie(currentBoardId);
+    }
+
+    try {
+        const boardData = await fetchBoard(currentBoardId);
+        renderBoard(boardData);
+    } catch (error) {
+        writeStatus('Failed to load board');
+    }
 }
 
-function loadBoardFromReceivedData(data)
-{
-	try
-	{
-		clearBoard();
-
-		setBoardClickHandlers();
-
-		var pieceArray = data.Pieces;
-
-		for (var i = 0; i < pieceArray.length; i++) {
-			var piece = pieceArray[i];
-
-			var pieceHtml = determinePieceHtml(piece);
-
-			var pieceSelector = '.block.row' + piece.BoardPosition.Row + '.col' + piece.BoardPosition.Col;
-
-			$(pieceSelector).html(pieceHtml);
-			
-			$(pieceSelector).unbind('click'); // Unbind existing blank space click event(s)
-
-			$(pieceSelector).click(function (e) {
-				e.preventDefault();
-				clearBoardHighlights();
-				$(this).addClass('highlight');
-
-				selected = this.id;
-				//writeStatus('selected ' + selected);
-
-				showMoves();
-				//writeStatus('selected ' + selectedClick.PieceType + ' / pieceNumber ' + selectedClick.PieceNumber  + ' / color ' + selectedClick.PieceTeam + ' / col ' + selectedClick.BoardPosition.Col + ' / row ' + selectedClick.BoardPosition.Row)
-			})
-		}
-
-	}	
-	catch (e)
-	{
-		writeStatus(e);
-	}
+async function createNewBoard() {
+    clearBoardIdCookie();
+    currentBoardId = createGuid();
+    setBoardIdCookie(currentBoardId);
+    clearStatus();
+    selectedSquare = null;
+    validMoves = [];
+    writeStatus('Creating new board...');
+    await refreshBoard();
 }
 
-function retrieveBoardState()
-{
-	// Get this jQuery madness out of here if time permits.  Plain Jane JS is more than sufficient
-	var boardId = readBoardIdFromCookie();
-	writeStatus('Attempting to get board: [' + boardId + ']');
-	
-	var apiUri = 'http://localhost:9997/board/' + boardId;
-	
-	$.getJSON(apiUri)
-		.done(function(data) {
-			try
-			{
-				writeStatus('Successfully rec`d board: [' + data.Id + ']');
+async function undoMove() {
+    if (!currentBoardId) return;
 
-				loadBoardFromReceivedData(data);
-			}
-			catch(e)
-			{
-				writeStatus('Failed to deserialize json board')
-			}
-		})
-		.fail(function() {
-			writeStatus('<p>API call to ' + apiUri + ' failed</p>');
+    try {
+        writeStatus('Undoing last move...');
 
-		})
+        const response = await fetch(`${API_BASE_URL}/board/${currentBoardId}/undo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.Success || result.success) {
+            writeStatus('Move undone successfully');
+            clearBoardHighlights();
+            selectedSquare = null;
+            validMoves = [];
+            await refreshBoard();
+        } else {
+            writeStatus(`Undo failed: ${result.Message || result.message || 'No moves to undo'}`);
+        }
+    } catch (error) {
+        writeStatus(`Error undoing move: ${error.message}`);
+    }
 }
 
-function showMoves() {
-	var boardId = readBoardIdFromCookie();
-
-	var apiUri = 'http://localhost:9997/showmoves/' + boardId + '/' + selected;
-	writeStatus('Getting moves for selected: ' + apiUri);
-
-	$.getJSON(apiUri)
-		.done(function(data) {
-			try	{
-				writeStatus('Found [' + data.length +'] candidate moves.');
-				
-				for (var i = 0; i < data.length; i++) {
-					writeStatus('possible move: ' + data[i].Col + ',' + data[i].Row);
-
-					var pieceSelector = '.block.row' + data[i].Col + '.col' + data[i].Row;
-					if (data[i].AttackPosition == false) {
-						$(pieceSelector).addClass('possibleMove');
-					}
-					else {
-						$(pieceSelector).addClass('possibleAttack');	
-					}
-				}
-			}
-			catch(e)
-			{
-				writeStatus('failed to deserialize json showMoves')
-			}
-		})
-		.fail(function() {
-			writeStatus('<p>API call to ' + apiUri + ' failed</p>');
-
-		})
-		.always(function() {
-		})
+// Version display
+async function setVersion() {
+    try {
+        const response = await fetch('version.json');
+        const data = await response.json();
+        const versionLabel = document.getElementById('versionLabel');
+        if (versionLabel) {
+            versionLabel.textContent = data.version;
+        }
+    } catch (error) {
+        console.error('Failed to load version:', error);
+    }
 }
 
-function clearStatus()
-{
-	$('#statuss').html('');
+// Button handlers
+function wireUpButtons() {
+    const refreshBtn = document.getElementById('refreshboard');
+    if (refreshBtn) {
+        refreshBtn.onclick = () => {
+            clearBoardHighlights();
+            refreshBoard();
+        };
+    }
+
+    const clearStatusBtn = document.getElementById('clearStatus');
+    if (clearStatusBtn) {
+        clearStatusBtn.onclick = clearStatus;
+    }
+
+    const newBoardBtn = document.getElementById('newBoard');
+    if (newBoardBtn) {
+        newBoardBtn.onclick = createNewBoard;
+    }
+
+    const undoBtn = document.getElementById('undoMove');
+    if (undoBtn) {
+        undoBtn.onclick = undoMove;
+    }
+
+    // Remove old move buttons that don't make sense with proper move logic
+    const oldMoveButtons = ['moveBlackPawns', 'moveWhitePawns', 'showMoves'];
+    oldMoveButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.style.display = 'none';
+        }
+    });
 }
 
-function writeStatus(statusMessage)
-{
-	$('#statuss').append('<br />' + statusMessage);
-}
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    writeStatus('JsMate Chess - Initializing...');
+    wireUpButtons();
+    setVersion();
 
+    currentBoardId = getBoardIdFromCookie();
+    if (!currentBoardId) {
+        currentBoardId = createGuid();
+        setBoardIdCookie(currentBoardId);
+    }
 
-function moveAllPawnsForward(boardId)
-{
-	for (var team = 0; team < 2; team++) {
-		for (var i = 1; i <=8; i++) {
-			var apiUri = 'http://localhost:9997/move/' + boardId + '/' + team + '/Pawn/' + i;
-			writeStatus('moving piece: ' + apiUri);
-
-			$.getJSON(apiUri)
-				.done(function(data) {
-					try
-					{
-						writeStatus('moved board: ' + data);
-					}
-					catch(e)
-					{
-						writeStatus('failed to deserialize json move')
-					}
-				})
-				.fail(function() {
-					writeStatus('<p>API call to ' + apiUri + ' failed</p>');
-
-				})
-				.always(function() {
-					//clearBoardHighlights();
-					//retrieveBoardState();
-				})
-			function foobar(el) { setTimeout(function() { foobar_cont(el); }, 500); }
-		}
-		function foobar(el) { setTimeout(function() { foobar_cont(el); }, 500); }
-	}
-	clearBoardHighlights();
-	retrieveBoardState();
-}
-
-function wireUpButtons()
-{
-	$('#refreshboard').click(function() {
-		clearBoardHighlights();
-		retrieveBoardState();
-	});
-
-
-	$('#clearStatus').click(function() {
-		clearStatus();
-	});
-
-	$('#newBoard').click(function() {
-		clearBoardCookie();
-		clearStatus();
-		setBoardCookie();
-		clearBoardHighlights();
-		retrieveBoardState();
-	});
-
-	$('#moveBlackPawns').click(function() {
-		var boardId = readBoardIdFromCookie();
-	
-		var apiUri = 'http://localhost:9997/move/' + boardId + '/0/Pawn/2';
-		writeStatus('moving piece: ' + apiUri);
-
-		$.getJSON(apiUri)
-			.done(function(data) {
-				try
-				{
-					writeStatus('moved board: ' + data);
-				}
-				catch(e)
-				{
-					writeStatus('failed to deserialize json move')
-				}
-			})
-			.fail(function() {
-				writeStatus('<p>API call to ' + apiUri + ' failed</p>');
-
-			})
-			.always(function() {
-				clearBoardHighlights();
-				retrieveBoardState();
-			})
-	});
-
-	$('#moveWhitePawns').click(function() {
-		var boardId = readBoardIdFromCookie();
-
-		var apiUri = 'http://localhost:9997/move/' + boardId + '/1/Pawn/2';
-		writeStatus('moving piece: ' + apiUri);
-
-		$.getJSON(apiUri)
-			.done(function(data) {
-				try
-				{
-					writeStatus('moved board: ' + data);
-				}
-				catch(e)
-				{
-					writeStatus('failed to deserialize json move')
-				}
-			})
-			.fail(function() {
-				writeStatus('<p>API call to ' + apiUri + ' failed</p>');
-
-			})
-			.always(function() {
-				clearBoardHighlights();
-				retrieveBoardState();
-			})
-	});
-	
-
-	$('#showMoves').click(function() {
-		showMoves();
-	});
-}
-
-var selectedPiece = null;
-
-$(document).ready(function() {
-	wireUpButtons();
-	setVersion();
-	setBoardCookie();
-	retrieveBoardState();
+    refreshBoard();
 });
+
+// jQuery compatibility layer (for flash effects if jQuery is loaded)
+if (typeof jQuery !== 'undefined') {
+    jQuery.fn.extend({
+        flashClick: function() {
+            return this.fadeIn(FADE_INTERVAL).fadeOut(FADE_INTERVAL).fadeIn(FADE_INTERVAL);
+        }
+    });
+}
